@@ -8,7 +8,7 @@ export async function getUsers(_req: Request, res: Response, next: NextFunction)
     const users = await userService.GetUsers(next);
 
     if (!users || users.length === 0) {
-      return next(new NotFoundException('No users found'));
+      return next(new NotFoundException('No se encontraron usuarios'));
     }
 
     return res.status(200).send(users);
