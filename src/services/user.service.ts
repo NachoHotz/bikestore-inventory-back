@@ -1,13 +1,10 @@
 import { NextFunction } from 'express';
-import { AppDataStore } from '../db/connection';
-import { User } from '../db/entities/User.entity';
+import { prisma } from '../config';
 import InternalServerException from '../exceptions/InternalServerError';
-
-const userRepository = AppDataStore.getRepository(User);
 
 export async function GetUsers(next: NextFunction) {
   try {
-    return await userRepository.find();
+    return await prisma.user.findMany();
   } catch (error: any) {
     return next(new InternalServerException(`Error GetUsers service: ${error.message}`));
   }
