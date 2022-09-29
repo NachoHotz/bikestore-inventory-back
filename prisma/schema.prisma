@@ -13,3 +13,10 @@ model user {
   email    String @unique(map: "UQ_e12875dfb3b1d92d7d7c5377e22") @db.VarChar
   password String @db.VarChar
 }
+
+model Product {
+  id String @id
+  name String @db.VarChar
+  description String? @db.Text
+  quantity Int @db.Integer
+}
