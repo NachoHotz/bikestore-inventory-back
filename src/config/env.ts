@@ -3,7 +3,7 @@ dotenv.config();
 
 // IMPORTANT: Remove th DB envs you won´t use
 export const envConfig = {
-  API_PORT: process.env.API_PORT as string,
+  API_PORT: process.env.PORT as string,
   NODE_ENV: process.env.NODE_ENV as string,
   DB_HOST: process.env.DB_HOST as string,
   DB_PORT: process.env.DB_PORT as string,
