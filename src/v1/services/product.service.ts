@@ -3,6 +3,7 @@ import { NextFunction } from 'express';
 import { prisma } from '../../config';
 import BadRequestException from '../exceptions/BadRequestException';
 import InternalServerException from '../exceptions/InternalServerError';
+import NotFoundException from '../exceptions/NotFoundException';
 
 export async function GetAll(next: NextFunction) {
   try {
@@ -23,5 +24,33 @@ export async function Create(productInfo: Product, next: NextFunction) {
     return await prisma.product.create({ data: productInfo});
   } catch (error: any) {
     return next(new InternalServerException(`Error CreateProduct service: ${error.message}`));
+  }
+}
+
+export async function Update(id: string, productInfo: Partial<Product>, next: NextFunction) {
+  try {
+    const productExists = await prisma.product.findFirst({ where: { id } });
+
+    if (!productExists) {
+      return next(new NotFoundException(`Producto no encontrado con el código ${id}`));
+    }
+
+    return await prisma.product.update({ where: { id }, data: productInfo });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error UpdateProduct service: ${error.message}`));
+  }
+}
+
+export async function Delete(id: string, next: NextFunction) {
+  try {
+    const productExists = await prisma.product.findUnique({ where: { id } });
+
+    if (!productExists) {
+      return next(new NotFoundException('Producto no encontrado, posiblemente ya fue eliminado'));
+    }
+
+    return await prisma.product.delete({ where: { id } });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error DeleteProduct service: ${error.message}`));
   }
 }

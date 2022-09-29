@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import * as controller from '../controllers/product.controller';
 import { validateSchema } from '../middlewares/validateSchema.middleware';
-import { ProductSchema } from '../../../prisma/validations/Product.schema';
+import { CreateProductSchema, UpdateProductSchema  } from '../../../prisma/validations/Product';
 
 const productsRouter = Router();
 
 productsRouter.get('/', controller.getAll);
-productsRouter.post('/', validateSchema(ProductSchema), controller.create);
+productsRouter.post('/', validateSchema(CreateProductSchema), controller.create);
+productsRouter.put('/:id', validateSchema(UpdateProductSchema), controller.update);
+productsRouter.delete('/:id', controller.deleteOne);
 
 export default productsRouter;

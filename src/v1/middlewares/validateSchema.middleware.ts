@@ -1,4 +1,4 @@
-import { AnyZodObject } from 'zod';
+import { AnyZodObject, ZodOptional } from 'zod';
 import { Request, Response, NextFunction } from 'express';
 import BadRequestException from '../exceptions/BadRequestException';
 
