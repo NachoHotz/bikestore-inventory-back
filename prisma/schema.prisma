@@ -18,5 +18,5 @@ model Product {
   id String @id
   name String @db.VarChar
   description String? @db.Text
-  quantity Int @db.Integer
+  stock Int @db.Integer
 }
