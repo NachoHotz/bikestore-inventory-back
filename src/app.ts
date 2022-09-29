@@ -5,11 +5,11 @@ import cookieParser from 'cookie-parser';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import errorMiddleware from './middlewares/error.middleware';
+import mainRouter from './routes/index.routes';
 import { corsOptions, envConfig } from './config/';
 
-import mainRouter from './routes/index.routes';
-
 const app: Application = express();
+
 const { NODE_ENV, SENTRY_DSN } = envConfig;
 
 Sentry.init({

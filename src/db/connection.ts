@@ -13,7 +13,7 @@ const {
 import { DataSource } from 'typeorm';
 
 export const AppDataStore = new DataSource({
-  type: DB_DIALECT as any,
+  type: DB_DIALECT as 'postgres',
   host: DB_HOST,
   port: parseInt(DB_PORT, 10),
   username: DB_USER,
