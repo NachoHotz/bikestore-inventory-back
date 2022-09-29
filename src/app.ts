@@ -4,8 +4,8 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
-import errorMiddleware from './middlewares/error.middleware';
-import mainRouter from './routes/index.routes';
+import errorMiddleware from './v1/middlewares/error.middleware';
+import v1MainRouter from './v1/routes/index.routes';
 import { corsOptions, envConfig } from './config/';
 
 const app: Application = express();
@@ -37,7 +37,7 @@ if (NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.use('/', mainRouter);
+app.use('/api/v1', v1MainRouter);
 app.use(Sentry.Handlers.errorHandler());
 app.use(errorMiddleware);
 
