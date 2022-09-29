@@ -17,10 +17,10 @@ export async function Create(productInfo: Product, next: NextFunction) {
     const productExists  = await prisma.product.findUnique({ where: { id: productInfo.id } });
 
     if (productExists) {
-      return next(new BadRequestException(`There is already a product with the id ${productInfo.id}`));
+      return next(new BadRequestException(`Ya existe un producto con el código ${productInfo.id}`));
     }
 
-    return await prisma.product.create({ data: productInfo });
+    return await prisma.product.create({ data: productInfo});
   } catch (error: any) {
     return next(new InternalServerException(`Error CreateProduct service: ${error.message}`));
   }
