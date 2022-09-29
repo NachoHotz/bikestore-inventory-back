@@ -26,7 +26,6 @@
     "express": "^4.17.1",
     "helmet": "^5.0.2",
     "prisma": "^4.4.0",
-    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "typescript": "*",
     "winston": "^3.8.2"
