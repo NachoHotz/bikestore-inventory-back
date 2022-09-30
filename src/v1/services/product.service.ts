@@ -1,9 +1,7 @@
 import { Product } from '@prisma/client';
 import { NextFunction } from 'express';
 import { prisma } from '../../config';
-import BadRequestException from '../exceptions/BadRequestException';
-import InternalServerException from '../exceptions/InternalServerError';
-import NotFoundException from '../exceptions/NotFoundException';
+import { BadRequestException, InternalServerException, NotFoundException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {
   try {

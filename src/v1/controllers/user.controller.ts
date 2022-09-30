@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import InternalServerException from '../exceptions/InternalServerError';
-import NotFoundException from '../exceptions/NotFoundException';
+import { InternalServerException, NotFoundException } from '../exceptions';
 import * as userService from '../services/user.service';
 
 export async function getUsers(_req: Request, res: Response, next: NextFunction) {

@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import InternalServerException from '../exceptions/InternalServerError';
-import NotFoundException from '../exceptions/NotFoundException';
+import { InternalServerException, NotFoundException } from '../exceptions';
 import * as productService from '../services/product.service';
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {

@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
 import * as controller from '../controllers/basicController.controller';
-import NotFoundException from '../exceptions/NotFoundException';
 import productsRouter from './products.routes';
 import usersRouter from './users.routes';
+import { NotFoundException } from '../exceptions';
 
 const mainRouter = Router();
 

@@ -1,6 +1,6 @@
 import { NextFunction } from 'express';
 import { prisma } from '../../config';
-import InternalServerException from '../exceptions/InternalServerError';
+import { InternalServerException } from '../exceptions';
 
 export async function GetUsers(next: NextFunction) {
   try {
