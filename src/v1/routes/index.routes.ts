@@ -13,7 +13,7 @@ mainRouter.use('/users', usersRouter);
 mainRouter.use('/products', productsRouter);
 
 mainRouter.use('*', (_req, _res, next) =>
-  next(new NotFoundException('This page does not exist')),
+  next(new NotFoundException('This route does not exist')),
 );
 
 export default mainRouter;

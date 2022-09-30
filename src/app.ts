@@ -7,6 +7,7 @@ import * as Tracing from '@sentry/tracing';
 import errorMiddleware from './v1/middlewares/error.middleware';
 import v1MainRouter from './v1/routes/index.routes';
 import { corsOptions, envConfig } from './config/';
+import NotFoundException from './v1/exceptions/NotFoundException';
 
 const app: Application = express();
 
@@ -38,6 +39,11 @@ if (NODE_ENV === 'development') {
 }
 
 app.use('/api/v1', v1MainRouter);
+
+app.use('*', (req, res, next) => {
+  return next(new NotFoundException('This route does not exist'));
+});
+
 app.use(Sentry.Handlers.errorHandler());
 app.use(errorMiddleware);
 
