@@ -11,6 +11,14 @@ export async function GetAll(next: NextFunction) {
   }
 }
 
+export async function GetOne(id: string, next: NextFunction) {
+  try {
+    return await prisma.product.findUnique({ where: { id } });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error GetOneProducts service: ${error.message}`));
+  }
+}
+
 export async function Create(productInfo: Product, next: NextFunction) {
   try {
     const productExists  = await prisma.product.findUnique({ where: { id: productInfo.id } });

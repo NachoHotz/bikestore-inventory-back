@@ -16,6 +16,22 @@ export async function getAll(_req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function getOne(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id } = req.params;
+
+    const uniqueProduct = await productService.GetOne(id, next); 
+
+    if (!uniqueProduct) {
+      return next(new NotFoundException('No se encontro el producto solicitado'));
+    }
+
+    return res.status(200).send({ status: 200, uniqueProduct });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error getOneProducts controller: ${error.message}`));
+  }
+}
+
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const createdProduct = await productService.Create(req.body, next);

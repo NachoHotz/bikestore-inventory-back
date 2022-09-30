@@ -16,6 +16,23 @@ export async function getAll(_req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function getOne(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    const uniqueProvider = await providerService.GetOne(id, next);
+
+    if (!uniqueProvider) {
+      return next(new NotFoundException('No se encontro el proveedor solicitado'));
+    }
+
+    return res.status(200).send({ status: 200, uniqueProvider });
+  } catch (error: any) {
+    /* handle error */
+    return next(new InternalServerException(`Error getOneProvider controller: ${error.message}`));
+  }
+}
+
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const createdProvider = await providerService.Create(req.body, next);

@@ -6,6 +6,7 @@ import { validateSchema } from '../middlewares/validateSchema.middleware';
 const providersRouter = Router();
 
 providersRouter.get('/', controller.getAll);
+providersRouter.get('/:id', controller.getOne);
 providersRouter.post('/', validateSchema(CreateProviderSchema), controller.create);
 
 export default providersRouter;
