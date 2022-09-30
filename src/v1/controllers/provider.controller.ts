@@ -44,3 +44,32 @@ export async function create(req: Request, res: Response, next: NextFunction) {
     return next(new InternalServerException(`Error createProvider controller: ${error.message}`));
   }
 }
+
+export async function update(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    const updatedProvider = await providerService.Update(id, req.body, next);
+
+    if (!updatedProvider) return;
+
+    return res.status(200).send({ status: 200, updatedProvider });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error updateProvider controller: ${error.message}`));
+  }
+}
+
+export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    const deletedProvider = await providerService.Delete(id, next);
+
+    if (!deletedProvider) return;
+
+    return res.status(200).send({ status: 200, message: 'Proveedor eliminado con éxito' });
+  } catch (error: any) {
+    /* handle error */
+    return next(new InternalServerException(`Error deleteProvider controller: ${error.message}`));
+  }
+}

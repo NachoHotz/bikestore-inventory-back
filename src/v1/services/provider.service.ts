@@ -32,3 +32,31 @@ export async function Create(providerInfo: Provider, next: NextFunction) {
     return next(new InternalServerException(`Error CreateProvider service: ${error.message}`));
   }
 }
+
+export async function Update(id: number, providerInfo: Provider, next: NextFunction) {
+  try {
+    const providerExists = await prisma.provider.findUnique({ where: { id } });
+
+    if (!providerExists) {
+      return next(new NotFoundException('No se econtro el proveedor solicitado'));
+    }
+
+    return await prisma.provider.update({ where: { id }, data: providerInfo });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error UpdateProvider service: ${error.message}`));
+  }
+}
+
+export async function Delete(id: number, next: NextFunction) {
+  try {
+    const providerExists = await prisma.provider.findUnique({ where: { id } });
+
+    if (!providerExists) {
+      return next(new NotFoundException('No se encontro el proveedor solicitado. Posiblemente ya ha sido borrado'));
+    }
+
+    return await prisma.provider.delete({ where: { id } });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error DeleteProvider service: ${error.message}`));
+  }
+}
