@@ -26,6 +26,7 @@ model Product {
   name String @db.VarChar
   description String? @db.Text
   stock Int @db.Integer
+  price Float @db.Real
   category Category @relation(fields: [categoryId], references: [id])
   categoryId Int
   provider Provider @relation(fields: [providerId], references: [id])

@@ -5,7 +5,12 @@ import { BadRequestException, InternalServerException, NotFoundException } from 
 
 export async function GetAll(next: NextFunction) {
   try {
-    return await prisma.product.findMany();
+    return await prisma.product.findMany({
+      include: {
+        category: true,
+        provider: true
+      }
+    });
   } catch (error: any) {
     return next(new InternalServerException(`Error GetAllProducts service: ${error.message}`));
   }
@@ -13,7 +18,7 @@ export async function GetAll(next: NextFunction) {
 
 export async function GetOne(id: string, next: NextFunction) {
   try {
-    return await prisma.product.findUnique({ where: { id } });
+    return await prisma.product.findUnique({ where: { id }, include: { category: true, provider: true } });
   } catch (error: any) {
     return next(new InternalServerException(`Error GetOneProducts service: ${error.message}`));
   }
@@ -21,13 +26,13 @@ export async function GetOne(id: string, next: NextFunction) {
 
 export async function Create(productInfo: Product, next: NextFunction) {
   try {
-    const productExists  = await prisma.product.findUnique({ where: { id: productInfo.id } });
+    const productExists = await prisma.product.findUnique({ where: { id: productInfo.id } });
 
     if (productExists) {
       return next(new BadRequestException(`Ya existe un producto con el código ${productInfo.id}`));
     }
 
-    return await prisma.product.create({ data: productInfo});
+    return await prisma.product.create({ data: productInfo });
   } catch (error: any) {
     return next(new InternalServerException(`Error CreateProduct service: ${error.message}`));
   }
