@@ -40,7 +40,7 @@ if (NODE_ENV === 'development') {
 
 app.use('/api/v1', v1MainRouter);
 
-app.use('*', (req, res, next) => {
+app.use('*', (_req, _res, next) => {
   return next(new NotFoundException('This route does not exist'));
 });
 
