@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as productService from '../services/product.service';
 
-export async function getAll(req: Request, res: Response, next: NextFunction) {
+export async function getAll(_req: Request, res: Response, next: NextFunction) {
   try {
     const allProducts = await productService.GetAll(next);
 
