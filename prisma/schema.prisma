@@ -12,6 +12,8 @@ model User {
   name     String @db.VarChar
   email    String @unique(map: "UQ_e12875dfb3b1d92d7d7c5377e22") @db.VarChar
   password String @db.VarChar
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Provider {
@@ -19,6 +21,8 @@ model Provider {
   name       String    @db.VarChar
   email      String    @unique(map: "UQ_2b9c9d8d0b0c7e5e5f7f0c8d8e7") @db.VarChar
   products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Product {
@@ -31,10 +35,14 @@ model Product {
   categoryId Int
   provider Provider @relation(fields: [providerId], references: [id])
   providerId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
   id Int @id(map: "PK_0e1c0a1d7d8f2f6f7b0d0b1d7e2") @default(autoincrement())
   name String @db.VarChar
   products Product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
