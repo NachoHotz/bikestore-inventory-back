@@ -1,7 +1,7 @@
 import { NextFunction } from 'express';
 import { User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { prisma } from '../../config';
+import { logger, prisma } from '../../config';
 import { BadRequestException, InternalServerException, InvalidCredentialsException } from '../exceptions';
 import { createToken } from '../../lib/jwt';
 
@@ -13,7 +13,7 @@ export async function Login(loginCredentials: User, next: NextFunction) {
       return next(new InvalidCredentialsException('Correo o contraseña incorrectos'));
     }
 
-    const passwordsMatch = await bcrypt.compare(userExists.password, loginCredentials.password);
+    const passwordsMatch = await bcrypt.compare(loginCredentials.password, userExists.password);
 
     if (!passwordsMatch) {
       return next(new InvalidCredentialsException('Correo o contraseña incorrectos'));
