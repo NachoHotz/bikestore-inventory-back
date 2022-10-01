@@ -35,6 +35,7 @@ model Product {
   categoryId Int
   provider Provider @relation(fields: [providerId], references: [id])
   providerId Int
+  sale ProductsOnSale[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -43,6 +44,33 @@ model Category {
   id Int @id(map: "PK_0e1c0a1d7d8f2f6f7b0d0b1d7e2") @default(autoincrement())
   name String @db.VarChar
   products Product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Sale {
+  id Int @id() @default(autoincrement())
+  date DateTime @default(now())
+  products ProductsOnSale[]
+  PaymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId Int
+  amount Float
+}
+
+model ProductsOnSale {
+  product Product @relation(fields: [productId], references: [id])
+  productId String
+  sale Sale @relation(fields: [saleId], references: [id])
+  saleId Int
+  assignedAt DateTime @default(now())
+
+  @@id([productId, saleId])
+}
+
+model PaymentMethod {
+  id Int @id() @default(autoincrement())
+  name String @db.VarChar
+  sales Sale[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
