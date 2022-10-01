@@ -1,7 +1,7 @@
 import { NextFunction } from 'express';
 import { User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { logger, prisma } from '../../config';
+import { prisma } from '../../config';
 import { BadRequestException, InternalServerException, InvalidCredentialsException } from '../exceptions';
 import { createToken } from '../../lib/jwt';
 
