@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import { LoginUserSchema } from '../../../prisma/validations/User';
-import { SignUpUserSchema } from '../../../prisma/validations/User/SignUpUser.schema';
-import * as controller from '../controllers/auth.controller';
+import { LoginUserSchema, SignUpUserSchema } from '../../../prisma/validations/User';
 import { validateSchema } from '../middlewares/validateSchema.middleware';
+import * as controller from '../controllers/auth.controller';
 
 const authRouter = Router();
 
