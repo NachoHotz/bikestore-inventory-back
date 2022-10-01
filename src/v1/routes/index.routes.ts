@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import * as controller from '../controllers/basicController.controller';
+import * as authMiddleware from '../middlewares/auth.middleware';
 
 import productsRouter from './product.routes';
 import providersRouter from './provider.routes';
@@ -14,6 +15,8 @@ const mainRouter = Router();
 mainRouter.get('/', controller.basicController);
 
 mainRouter.use('/auth', authRouter);
+
+mainRouter.use(authMiddleware.verifyAcessJwt);
 mainRouter.use('/products', productsRouter);
 mainRouter.use('/providers', providersRouter);
 mainRouter.use('/categories', categoriesRouter);

@@ -1,6 +1,6 @@
 import { DataStoredInToken } from '../interfaces';
 import { User } from '@prisma/client';
-import { jwtOptsSign } from '../utils/jwtOpts';
+import { jwtOptsDecode, jwtOptsSign } from '../utils/jwtOpts';
 
 export function createToken(data: User, tokenType: string) {
   const dataStoredInToken: DataStoredInToken = {
@@ -8,4 +8,8 @@ export function createToken(data: User, tokenType: string) {
   };
 
   return jwtOptsSign[tokenType as keyof typeof jwtOptsSign](dataStoredInToken);
+}
+
+export function decodeToken(token: string, tokenType: string) {
+  return jwtOptsDecode[tokenType as keyof typeof jwtOptsDecode](token);
 }
