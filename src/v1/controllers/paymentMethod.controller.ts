@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as paymentMethodService from '../services/paymentMethod.service';
 
-export async function getAll(req: Request, res: Response, next: NextFunction) {
+export async function getAll(_req: Request, res: Response, next: NextFunction) {
   try {
     const allPaymentMethods = await paymentMethodService.GetAll(next);
 
@@ -25,5 +25,19 @@ export async function create(req: Request, res: Response, next: NextFunction) {
     return res.status(201).send({ status: 201, createdPaymentMethod });
   } catch (error: any) {
     return next(new InternalServerException(`Error createPaymentMethod controller: ${error.message}`));
+  }
+}
+
+export async function update(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    const updatedPaymentMethod = await paymentMethodService.Update(id, req.body, next);
+
+    if (!updatedPaymentMethod) return;
+
+    return res.status(200).send({ status: 200, updatedPaymentMethod });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error updatePaymentMethod controller: ${error.message}`));
   }
 }
