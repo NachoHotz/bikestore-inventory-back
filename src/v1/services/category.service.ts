@@ -5,7 +5,7 @@ import { Category } from '@prisma/client';
 
 export async function GetAll(next: NextFunction) {
   try {
-    return await prisma.category.findMany({ include: { products: true } });
+    return await prisma.category.findMany();
   } catch (error: any) {
     return next(new InternalServerException(`Error GetAllCategories service: ${error.message}`));
   }

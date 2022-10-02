@@ -18,7 +18,13 @@ export async function GetAll(next: NextFunction) {
 
 export async function GetOne(id: string, next: NextFunction) {
   try {
-    return await prisma.product.findUnique({ where: { id }, include: { category: true, provider: true } });
+    return await prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: true,
+        provider: true
+      }
+    });
   } catch (error: any) {
     return next(new InternalServerException(`Error GetOneProducts service: ${error.message}`));
   }
@@ -46,7 +52,14 @@ export async function Update(id: string, productInfo: Partial<Product>, next: Ne
       return next(new NotFoundException(`Producto no encontrado con el código ${id}`));
     }
 
-    return await prisma.product.update({ where: { id }, data: productInfo });
+    return await prisma.product.update({
+      where: { id },
+      data: productInfo,
+      include: {
+        category: true,
+        provider: true
+      }
+    });
   } catch (error: any) {
     return next(new InternalServerException(`Error UpdateProduct service: ${error.message}`));
   }
