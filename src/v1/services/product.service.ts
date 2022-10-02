@@ -57,7 +57,7 @@ export async function Delete(id: string, next: NextFunction) {
     const productExists = await prisma.product.findUnique({ where: { id } });
 
     if (!productExists) {
-      return next(new NotFoundException('Producto no encontrado, posiblemente ya fue eliminado'));
+      return next(new NotFoundException('No se encontro el producto solicitado. Posiblemente ya ha sido eliminado'));
     }
 
     return await prisma.product.delete({ where: { id } });

@@ -41,3 +41,17 @@ export async function update(req: Request, res: Response, next: NextFunction) {
     return next(new InternalServerException(`Error updatePaymentMethod controller: ${error.message}`));
   }
 }
+
+export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    const deletedPaymentMethod = await paymentMethodService.Delete(id, next);
+
+    if (!deletedPaymentMethod) return;
+
+    return res.status(200).send({ status: 200, message: 'Metodo de pago eliminado con éxito' });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error deletePaymentMethod controller: ${error.message}`));
+  }
+}

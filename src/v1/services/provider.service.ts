@@ -52,7 +52,7 @@ export async function Delete(id: number, next: NextFunction) {
     const providerExists = await prisma.provider.findUnique({ where: { id } });
 
     if (!providerExists) {
-      return next(new NotFoundException('No se encontro el proveedor solicitado. Posiblemente ya ha sido borrado'));
+      return next(new NotFoundException('No se encontro el proveedor solicitado. Posiblemente ya ha sido eliminado'));
     }
 
     return await prisma.provider.delete({ where: { id } });

@@ -52,7 +52,7 @@ export async function Delete(id: number, next: NextFunction) {
     const categoryExists = await prisma.category.findUnique({ where: { id } });
 
     if (!categoryExists) {
-      return next(new BadRequestException(`No se encontro la categoria con el código ${id}`));
+      return next(new BadRequestException('No se encontro la categoria solicitada. Posiblemente ya ha sido eliminada'));
     }
 
     return await prisma.category.delete({ where: { id } });
