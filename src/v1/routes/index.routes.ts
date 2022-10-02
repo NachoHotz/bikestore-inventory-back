@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import * as controller from '../controllers/basicController.controller';
+import * as controller from '../controllers/rootController.controller';
 import * as authMiddleware from '../middlewares/auth.middleware';
 
 import productsRouter from './product.routes';
@@ -13,7 +13,7 @@ import { NotFoundException } from '../exceptions';
 
 const mainRouter = Router();
 
-mainRouter.get('/', controller.basicController);
+mainRouter.get('/', controller.rootController);
 
 mainRouter.use('/auth', authRouter);
 
