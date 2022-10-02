@@ -1,7 +1,7 @@
 import { PaymentMethod } from '@prisma/client';
 import { NextFunction } from 'express';
 import { prisma } from '../../config';
-import { BadRequestException, InternalServerException, NotFoundException } from '../exceptions';
+import { BadRequestException, InternalServerException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {
   try {
