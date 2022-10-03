@@ -75,7 +75,7 @@ export async function Update(id: number, newSalesInfo: Sale, next: NextFunction)
     const saleExists = await prisma.sale.findUnique({ where: { id } });
 
     if (!saleExists) {
-      return next(new NotFoundException('No no se encontro la venta solicitada'));
+      return next(new BadRequestException('No no se encontro la venta solicitada'));
     }
 
     return await prisma.sale.update({
