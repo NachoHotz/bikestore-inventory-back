@@ -3,7 +3,7 @@ import { prisma } from '../../config';
 import { decodeToken } from '../../lib/jwt';
 import { BadRequestException, InvalidToken } from '../exceptions';
 
-export async function verifyAcessJwt(req: Request, res: Response, next: NextFunction) {
+export async function verifyAcessJwt(req: Request, _res: Response, next: NextFunction) {
   const token = req.headers.authorization?.split(' ').pop();
 
   if (!token || token === 'Bearer') {
