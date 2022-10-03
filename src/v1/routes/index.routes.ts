@@ -7,6 +7,7 @@ import productsRouter from './product.routes';
 import providersRouter from './provider.routes';
 import categoriesRouter from './category.routes';
 import paymentMethodsRouter from './paymentMethod.routes';
+import salesRouter from './sale.routes';
 import authRouter from './auth.routes';
 
 import { NotFoundException } from '../exceptions';
@@ -22,6 +23,7 @@ mainRouter.use('/products', productsRouter);
 mainRouter.use('/providers', providersRouter);
 mainRouter.use('/payMethods', paymentMethodsRouter);
 mainRouter.use('/categories', categoriesRouter);
+mainRouter.use('/sales', salesRouter);
 
 mainRouter.use('*', (_req, _res, next) =>
   next(new NotFoundException('This route does not exist')),
