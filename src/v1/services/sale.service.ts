@@ -79,7 +79,9 @@ export async function Update(id: number, newSalesInfo: Sale, next: NextFunction)
     }
 
     return await prisma.sale.update({
-      where: { id }, data: newSalesInfo, include: {
+      where: { id },
+      data: newSalesInfo,
+      include: {
         PaymentMethod: true, products: {
           include: {
             product: true
