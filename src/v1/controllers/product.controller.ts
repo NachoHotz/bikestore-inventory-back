@@ -20,7 +20,7 @@ export async function getOne(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
 
-    const uniqueProduct = await productService.GetOne(id, next); 
+    const uniqueProduct = await productService.GetOne(id, next);
 
     if (!uniqueProduct) {
       return next(new NotFoundException('No se encontro el producto solicitado'));
