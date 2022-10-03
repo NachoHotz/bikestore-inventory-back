@@ -13,7 +13,7 @@ export async function GetAll(next: NextFunction) {
 
 export async function Create(paymentMethodInfo: PaymentMethod, next: NextFunction) {
   try {
-    const paymentMethodExists = await prisma.paymentMethod.findFirst({ where: { name: paymentMethodInfo.name }});
+    const paymentMethodExists = await prisma.paymentMethod.findFirst({ where: { name: paymentMethodInfo.name } });
 
     if (paymentMethodExists) {
       return next(new BadRequestException(`Ya existe un metodo de pago con el nombre ${paymentMethodInfo.name}`));

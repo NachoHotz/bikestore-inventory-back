@@ -1,7 +1,7 @@
 import { Sale } from '@prisma/client';
 import { NextFunction } from 'express';
 import { prisma } from '../../config';
-import { InternalServerException } from '../exceptions';
+import { BadRequestException, InternalServerException, NotFoundException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {
   try {
@@ -11,7 +11,8 @@ export async function GetAll(next: NextFunction) {
           include: {
             product: true
           }
-        }
+        },
+        PaymentMethod: true,
       }
     });
 
@@ -66,5 +67,41 @@ export async function Create(newSaleInfo: Sale, products: string[], next: NextFu
     });
   } catch (error: any) {
     return next(new InternalServerException(`Error CreateSale service: ${error.message}`));
+  }
+}
+
+export async function Update(id: number, newSalesInfo: Sale, next: NextFunction) {
+  try {
+    const saleExists = await prisma.sale.findUnique({ where: { id } });
+
+    if (!saleExists) {
+      return next(new NotFoundException('No no se encontro la venta solicitada'));
+    }
+
+    return await prisma.sale.update({
+      where: { id }, data: newSalesInfo, include: {
+        PaymentMethod: true, products: {
+          include: {
+            product: true
+          }
+        }
+      }
+    });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error UpdateSale service: ${error.message}`));
+  }
+}
+
+export async function Delete(id: number, next: NextFunction) {
+  try {
+    const saleExists = await prisma.sale.findUnique({ where: { id } });
+
+    if (!saleExists) {
+      return next(new BadRequestException('No se encontro la venta solicitada. Posiblemente ya ha sido eliminada'));
+    }
+
+    return await prisma.sale.delete({ where: { id } });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error DeleteSale service: ${error.message}`));
   }
 }

@@ -28,7 +28,6 @@ export async function getOne(req: Request, res: Response, next: NextFunction) {
 
     return res.status(200).send({ status: 200, uniqueProvider });
   } catch (error: any) {
-    /* handle error */
     return next(new InternalServerException(`Error getOneProvider controller: ${error.message}`));
   }
 }
@@ -53,7 +52,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
     if (!updatedProvider) return;
 
-    return res.status(200).send({ status: 200, updatedProvider });
+    return res.status(200).send({ status: 200, message: 'Proveedor actualizado con éxito', updatedProvider });
   } catch (error: any) {
     return next(new InternalServerException(`Error updateProvider controller: ${error.message}`));
   }
@@ -69,7 +68,6 @@ export async function deleteOne(req: Request, res: Response, next: NextFunction)
 
     return res.status(200).send({ status: 200, message: 'Proveedor eliminado con éxito' });
   } catch (error: any) {
-    /* handle error */
     return next(new InternalServerException(`Error deleteProvider controller: ${error.message}`));
   }
 }

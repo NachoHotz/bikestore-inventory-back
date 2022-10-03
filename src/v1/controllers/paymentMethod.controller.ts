@@ -36,7 +36,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
     if (!updatedPaymentMethod) return;
 
-    return res.status(200).send({ status: 200, updatedPaymentMethod });
+    return res.status(200).send({ status: 200, message: 'Método de pago actualizado con éxito', updatedPaymentMethod });
   } catch (error: any) {
     return next(new InternalServerException(`Error updatePaymentMethod controller: ${error.message}`));
   }

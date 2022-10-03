@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as categoryService from '../services/category.service';
 
-export async function getAll(req: Request, res: Response, next: NextFunction) {
+export async function getAll(_req: Request, res: Response, next: NextFunction) {
   try {
     const allCategories = await categoryService.GetAll(next);
 
@@ -52,7 +52,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
     if (!updatedCategory) return;
 
-    return res.status(200).send({ status: 200, updatedCategory });
+    return res.status(200).send({ status: 200, message: 'Categoria actualizada con éxito', updatedCategory });
   } catch (error: any) {
     return next(new InternalServerException(`Error updateCategory controller: ${error.message}`));
   }

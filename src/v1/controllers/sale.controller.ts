@@ -27,3 +27,30 @@ export async function create(req: Request, res: Response, next: NextFunction) {
     return next(new InternalServerException(`Error createSale controller: ${error.message}`));
   }
 }
+
+export async function update(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    const updatedSale = await saleService.Update(id, req.body, next);
+
+    if (!updatedSale) return;
+
+    return res.status(200).send({ status: 200, message: 'Venta actualizada con éxito', updatedSale });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error updateService controller: ${error.message}`));
+  }
+}
+
+export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const deletedSale = await saleService.Delete(id, next);
+
+    if (!deletedSale) return;
+
+    return res.status(200).send({ status: 200, message: 'Venta eliminada con éxito' });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error deleteSale controller: ${error.message}`));
+  }
+}
