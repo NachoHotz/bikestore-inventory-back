@@ -5,7 +5,15 @@ import { InternalServerException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {
   try {
-    const sales = await prisma.sale.findMany({ include: { products: { include: { product: true } } } });
+    const sales = await prisma.sale.findMany({
+      include: {
+        products: {
+          include: {
+            product: true
+          }
+        }
+      }
+    });
 
     return sales.map((sale) => {
       return {
