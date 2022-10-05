@@ -17,7 +17,7 @@ export async function GetAll(next: NextFunction) {
   }
 }
 
-export async function GetByQuery(query: IQuery, next: NextFunction) {
+export async function GetByQuery(query: Partial<IQuery>, next: NextFunction) {
   try {
     return await prisma.product.findMany({
       where: {

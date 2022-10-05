@@ -5,15 +5,7 @@ import * as productService from '../services/product.service';
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    let query: IQuery = {
-      q: '',
-      category: [],
-      provider: [],
-      sort: {
-        column: '',
-        direction: ''
-      }
-    };
+    let query: Partial<IQuery> = {};
 
     if (Object.entries(req.query).length !== 0) {
       const sortInfo = req.query.sort?.toString().split(',') as string[];
@@ -26,8 +18,8 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
         category: category ? category : [],
         provider: provider ? provider : [],
         sort: {
-          column: sortInfo[0],
-          direction: sortInfo[1]
+          column: sortInfo ? sortInfo.shift() as string : '',
+          direction: sortInfo ? sortInfo.pop() as string : ''
         }
       };
     }
@@ -36,7 +28,7 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
       const productsQuery = await productService.GetByQuery(query, next);
 
       if (!productsQuery || productsQuery.length === 0) {
-        return next(new NotFoundException('No se encontraron productos con la busqueda solicitada'));
+        return next(new NotFoundException('No se encontraron productos'));
       }
 
       return res.status(200).send({ status: 200, productsQuery });
