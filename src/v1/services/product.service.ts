@@ -36,7 +36,8 @@ export async function GetByQuery(query: any, next: NextFunction) {
           {
             category: {
               name: {
-                in: query.category
+                in: query.category,
+                mode: 'insensitive'
               }
             },
           },
@@ -44,6 +45,7 @@ export async function GetByQuery(query: any, next: NextFunction) {
             provider: {
               name: {
                 in: query.provider,
+                mode: 'insensitive'
               },
             },
           }
