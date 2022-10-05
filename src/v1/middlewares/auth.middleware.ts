@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { prisma } from '../../config';
+import { RequestExtended } from '../../interfaces';
 import { decodeToken } from '../../lib/jwt';
 import { BadRequestException, InvalidToken } from '../exceptions';
 
 export async function verifyAcessJwt(req: Request, _res: Response, next: NextFunction) {
-  const token = req.headers.authorization?.split(' ').pop();
+  const token = req.cookies['session_token'];
 
-  if (!token || token === 'Bearer') {
+  if (!token || token === '') {
     return next(new BadRequestException('No access token provided'));
   }
 
@@ -25,12 +26,12 @@ export async function verifyAcessJwt(req: Request, _res: Response, next: NextFun
 
   next();
 }
-export async function verifyRefreshJwt(req: Request, _res: Response, next: NextFunction) {
-  if (!req.cookies?.refresh) {
+export async function verifyRefreshJwt(req: RequestExtended, _res: Response, next: NextFunction) {
+  if (!req.cookies['refresh_token']) {
     return next(new BadRequestException('No refresh token provided'));
   }
 
-  const refreshToken = req.cookies?.refresh;
+  const refreshToken = req.cookies['refresh_token'];
 
   try {
     const decodedRefreshToken = decodeToken(refreshToken, 'refresh');
@@ -40,6 +41,7 @@ export async function verifyRefreshJwt(req: Request, _res: Response, next: NextF
       return next(new InvalidToken('refresh'));
     }
 
+    req.user = user;
   } catch (error: any) {
     return next(new InvalidToken('refrehs', error));
   }

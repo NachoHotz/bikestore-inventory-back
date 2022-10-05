@@ -1,1 +1,2 @@
-export * from './DataStoredInToken';
+export * from './DataStoredInToken.interface';
+export * from './RequestExtended.interface';

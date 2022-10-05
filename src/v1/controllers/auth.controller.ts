@@ -1,6 +1,12 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerException } from '../exceptions';
+import { envConfig } from '../../config';
 import * as authService from '../services/auth.service';
+import { createToken } from '../../lib';
+import { RequestExtended } from '../../interfaces';
+
+const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
 
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
@@ -8,7 +14,21 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     if (!userInfo) return;
 
-    return res.status(200).send(userInfo);
+    res.cookie('session_token', userInfo.access_token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      expires: new Date(Date.now())
+    });
+
+    res.cookie('refresh_token', userInfo.refresh_token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      expires: new Date(Date.now())
+    });
+
+    return res.status(200).send({ user: { ...userInfo.current_user, password: null } });
   } catch (error: any) {
     return next(new InternalServerException(`Error login controller: ${error.message}`));
   }
@@ -22,8 +42,48 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
       return next(new InternalServerException('Hubo un error en el registro. Por favor intenta nuevamente'));
     }
 
-    return res.status(200).send(userInfo);
+    res.cookie('session_token', userInfo.access_token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      expires: new Date(Date.now() + JWT_ACCESS_TOKEN_EXP)
+    });
+
+    res.cookie('refresh_token', userInfo.refresh_token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP)
+    });
+
+    return res.status(200).send({ user: { ...userInfo.current_user, password: null } });
   } catch (error: any) {
     return next(new InternalServerException(`Error signUp controller: ${error.message}`));
   }
+}
+
+export function refreshTokens(req: RequestExtended, res: Response, next: NextFunction) {
+  const { user } = req;
+
+  try {
+    const access_token = createToken(user!, 'access');
+    const refresh_token = createToken(user!, 'refresh');
+
+    res.cookie('session_token', access_token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    });
+
+    res.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    });
+
+    return res.sendStatus(204);
+  } catch (error: any) {
+    return next(new InternalServerException(`Error refreshTokens controller: ${error.message}`));
+  }
+
 }
