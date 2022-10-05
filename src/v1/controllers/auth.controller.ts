@@ -62,6 +62,13 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function logOut(_req: Request, res: Response) {
+  res.clearCookie('session_token');
+  res.clearCookie('refresh_token');
+
+  return res.sendStatus(204);
+}
+
 export function refreshTokens(req: RequestExtended, res: Response, next: NextFunction) {
   const { user } = req;
 
