@@ -10,7 +10,7 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
     if (Object.entries(req.query).length !== 0) {
       const sortInfo = req.query.sort?.toString().split(',') as string[];
 
-      const provider=  req.query.provider?.toString().split(',');
+      const provider = req.query.provider?.toString().split(',');
       const category = req.query.category?.toString().split(',');
 
       query = {

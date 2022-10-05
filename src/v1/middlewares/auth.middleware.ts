@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from 'express';
 import { prisma } from '../../config';
 import { RequestExtended } from '../../interfaces';
 import { decodeToken } from '../../lib/jwt';
-import { BadRequestException, InvalidToken } from '../exceptions';
+import { InvalidTokenException, MissingTokenException } from '../exceptions';
 
 export async function verifyAcessJwt(req: Request, _res: Response, next: NextFunction) {
   const token = req.cookies['session_token'];
 
   if (!token || token === '') {
-    return next(new BadRequestException('No access token provided'));
+    return next(new MissingTokenException('access'));
   }
 
   try {
@@ -17,18 +17,18 @@ export async function verifyAcessJwt(req: Request, _res: Response, next: NextFun
     const userInDB = await prisma.user.findUnique({ where: { email: userInfo.email } });
 
     if (!userInDB) {
-      return next(new InvalidToken('access'));
+      return next(new InvalidTokenException('access'));
     }
 
   } catch (error: any) {
-    return next(new InvalidToken(error));
+    return next(new InvalidTokenException(error));
   }
 
   next();
 }
 export async function verifyRefreshJwt(req: RequestExtended, _res: Response, next: NextFunction) {
   if (!req.cookies['refresh_token']) {
-    return next(new BadRequestException('No refresh token provided'));
+    return next(new MissingTokenException('refresh'));
   }
 
   const refreshToken = req.cookies['refresh_token'];
@@ -38,12 +38,12 @@ export async function verifyRefreshJwt(req: RequestExtended, _res: Response, nex
     const user = await prisma.user.findUnique({ where: { email: decodedRefreshToken.email } });
 
     if (!user) {
-      return next(new InvalidToken('refresh'));
+      return next(new InvalidTokenException('refresh'));
     }
 
     req.user = user;
   } catch (error: any) {
-    return next(new InvalidToken('refrehs', error));
+    return next(new InvalidTokenException('refrehs', error));
   }
   next();
 }
