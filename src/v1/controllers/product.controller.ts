@@ -8,8 +8,6 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
     let query: Partial<IQuery> = {};
 
     if (Object.entries(req.query).length !== 0) {
-      const sortInfo = req.query.sort?.toString().split(',') as string[];
-
       const provider = req.query.provider?.toString().split(',');
       const category = req.query.category?.toString().split(',');
 
@@ -17,10 +15,6 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
         q: req.query.q as string,
         category: category ? category : [],
         provider: provider ? provider : [],
-        sort: {
-          column: sortInfo ? sortInfo.shift() as string : '',
-          direction: sortInfo ? sortInfo.pop() as string : ''
-        }
       };
     }
 
