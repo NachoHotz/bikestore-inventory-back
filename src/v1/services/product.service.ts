@@ -16,24 +16,38 @@ export async function GetAll(next: NextFunction) {
   }
 }
 
-export async function GetByQuery(query: string, next: NextFunction) {
+export async function GetByQuery(query: any, next: NextFunction) {
   try {
     return await prisma.product.findMany({
       where: {
         OR: [
           {
             name: {
-              contains: query,
+              contains: query.q,
               mode: 'insensitive'
             }
           },
           {
             description: {
-              contains: query,
+              contains: query.q,
               mode: 'insensitive'
             }
+          },
+          {
+            category: {
+              name: {
+                in: query.category
+              }
+            },
+          },
+          {
+            provider: {
+              name: {
+                in: query.provider,
+              },
+            },
           }
-        ]
+        ],
       },
       include: {
         category: true,
@@ -45,28 +59,7 @@ export async function GetByQuery(query: string, next: NextFunction) {
   }
 }
 
-export async function GetByFilter(filter: string, next: NextFunction) {
-  try {
-    return await prisma.product.findMany({
-      where: {
-        category: {
-          name: {
-            contains: filter,
-            mode: 'insensitive'
-          }
-        }
-      },
-      include: {
-        category: true,
-        provider: true
-      }
-    });
-  } catch (error: any) {
-    return next(new InternalServerException(`Error GetByFilter service: ${error.message}`));
-  }
-}
-
-export async function GetOne(id: string, next: NextFunction) {
+export async function GetById(id: string, next: NextFunction) {
   try {
     return await prisma.product.findUnique({
       where: { id },

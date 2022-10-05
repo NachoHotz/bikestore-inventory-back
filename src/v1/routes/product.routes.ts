@@ -6,7 +6,7 @@ import * as controller from '../controllers/product.controller';
 const productsRouter = Router();
 
 productsRouter.get('/', controller.getAll);
-productsRouter.get('/:id', controller.getOne);
+productsRouter.get('/:id', controller.getById);
 productsRouter.post('/', validateSchema(CreateProductSchema), controller.create);
 productsRouter.put('/:id', validateSchema(UpdateProductSchema), controller.update);
 productsRouter.delete('/:id', controller.deleteOne);

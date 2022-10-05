@@ -4,27 +4,29 @@ import * as productService from '../services/product.service';
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    const search = req.query.search as string;
-    const { filter } = req.body;
+    let query = {};
 
-    if (search) {
-      const productsQuery = await productService.GetByQuery(search, next);
+    if (Object.entries(req.query).length !== 0) {
+      const provider=  req.query.provider?.toString().split(',');
+      const category = req.query.category?.toString().split(',');
+      const sort = req.query.sort?.toString().split(',');
+
+      query = {
+        q: req.query.q,
+        category: category ? category : [],
+        provider: provider ? provider : [],
+        sort: sort ? sort : []
+      };
+    }
+
+    if (Object.entries(query).length !== 0) {
+      const productsQuery = await productService.GetByQuery(query, next);
 
       if (!productsQuery || productsQuery.length === 0) {
         return next(new NotFoundException('No se encontraron productos con la busqueda solicitada'));
       }
 
       return res.status(200).send({ status: 200, productsQuery });
-    }
-
-    if (filter) {
-      const productsFilter = await productService.GetByFilter(filter, next);
-
-      if (!productsFilter || productsFilter.length === 0) {
-        return next(new NotFoundException('No se encontraron productos con el filtro seleccionado'));
-      }
-
-      return res.status(200).send({ status: 200, productsFilter });
     }
 
     const allProducts = await productService.GetAll(next);
@@ -39,11 +41,11 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function getOne(req: Request, res: Response, next: NextFunction) {
+export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
 
-    const uniqueProduct = await productService.GetOne(id, next);
+    const uniqueProduct = await productService.GetById(id, next);
 
     if (!uniqueProduct) {
       return next(new NotFoundException('No se encontro el producto solicitado'));
