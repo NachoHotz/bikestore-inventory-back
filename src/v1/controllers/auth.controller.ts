@@ -74,15 +74,8 @@ export function refreshTokens(req: RequestExtended, res: Response, next: NextFun
 
   try {
     const access_token = createToken(user!, 'access');
-    const refresh_token = createToken(user!, 'refresh');
 
     res.cookie('session_token', access_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-    });
-
-    res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
