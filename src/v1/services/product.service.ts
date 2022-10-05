@@ -16,6 +16,56 @@ export async function GetAll(next: NextFunction) {
   }
 }
 
+export async function GetByQuery(query: string, next: NextFunction) {
+  try {
+    return await prisma.product.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: query,
+              mode: 'insensitive'
+            }
+          },
+          {
+            description: {
+              contains: query,
+              mode: 'insensitive'
+            }
+          }
+        ]
+      },
+      include: {
+        category: true,
+        provider: true
+      }
+    });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error GetByQuery service: ${error.message}`));
+  }
+}
+
+export async function GetByFilter(filter: string, next: NextFunction) {
+  try {
+    return await prisma.product.findMany({
+      where: {
+        category: {
+          name: {
+            contains: filter,
+            mode: 'insensitive'
+          }
+        }
+      },
+      include: {
+        category: true,
+        provider: true
+      }
+    });
+  } catch (error: any) {
+    return next(new InternalServerException(`Error GetByFilter service: ${error.message}`));
+  }
+}
+
 export async function GetOne(id: string, next: NextFunction) {
   try {
     return await prisma.product.findUnique({

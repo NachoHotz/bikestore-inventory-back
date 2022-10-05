@@ -2,8 +2,31 @@ import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as productService from '../services/product.service';
 
-export async function getAll(_req: Request, res: Response, next: NextFunction) {
+export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
+    const search = req.query.search as string;
+    const { filter } = req.body;
+
+    if (search) {
+      const productsQuery = await productService.GetByQuery(search, next);
+
+      if (!productsQuery || productsQuery.length === 0) {
+        return next(new NotFoundException('No se encontraron productos con la busqueda solicitada'));
+      }
+
+      return res.status(200).send({ status: 200, productsQuery });
+    }
+
+    if (filter) {
+      const productsFilter = await productService.GetByFilter(filter, next);
+
+      if (!productsFilter || productsFilter.length === 0) {
+        return next(new NotFoundException('No se encontraron productos con el filtro seleccionado'));
+      }
+
+      return res.status(200).send({ status: 200, productsFilter });
+    }
+
     const allProducts = await productService.GetAll(next);
 
     if (!allProducts || allProducts.length === 0) {
