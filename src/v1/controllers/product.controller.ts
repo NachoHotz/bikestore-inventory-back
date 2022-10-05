@@ -1,21 +1,34 @@
 import { Request, Response, NextFunction } from 'express';
+import { IQuery } from '../../interfaces';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as productService from '../services/product.service';
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    let query = {};
+    let query: IQuery = {
+      q: '',
+      category: [],
+      provider: [],
+      sort: {
+        column: '',
+        direction: ''
+      }
+    };
 
     if (Object.entries(req.query).length !== 0) {
+      const sortInfo = req.query.sort?.toString().split(',') as string[];
+
       const provider=  req.query.provider?.toString().split(',');
       const category = req.query.category?.toString().split(',');
-      const sort = req.query.sort?.toString().split(',');
 
       query = {
-        q: req.query.q,
+        q: req.query.q as string,
         category: category ? category : [],
         provider: provider ? provider : [],
-        sort: sort ? sort : []
+        sort: {
+          column: sortInfo[0],
+          direction: sortInfo[1]
+        }
       };
     }
 

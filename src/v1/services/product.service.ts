@@ -1,6 +1,7 @@
 import { Product } from '@prisma/client';
 import { NextFunction } from 'express';
 import { prisma } from '../../config';
+import { IQuery } from '../../interfaces';
 import { BadRequestException, InternalServerException, NotFoundException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {
@@ -16,7 +17,7 @@ export async function GetAll(next: NextFunction) {
   }
 }
 
-export async function GetByQuery(query: any, next: NextFunction) {
+export async function GetByQuery(query: IQuery, next: NextFunction) {
   try {
     return await prisma.product.findMany({
       where: {
