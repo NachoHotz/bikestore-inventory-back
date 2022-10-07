@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import errorMiddleware from './v1/middlewares/error.middleware';
 import v1MainRouter from './v1/routes/index.routes';
-import { corsOptions, envConfig } from './config/';
+import { corsOptions, envConfig, NodeEnvs } from './config/';
 import { NotFoundException } from './v1/exceptions';
 
 const app: Application = express();
@@ -32,7 +32,7 @@ app.use(cors(corsOptions));
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 
-if (NODE_ENV === 'development') {
+if (NODE_ENV === NodeEnvs.development) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const morgan = require('morgan');
   app.use(morgan('dev'));
