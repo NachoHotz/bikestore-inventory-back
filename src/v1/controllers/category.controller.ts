@@ -17,8 +17,9 @@ export async function getAll(_req: Request, res: Response, next: NextFunction) {
 }
 
 export async function getOne(req: Request, res: Response, next: NextFunction){
+  const id = parseInt(req.params.id, 10);
+
   try {
-    const id = parseInt(req.params.id, 10);
 
     const uniqueCategory = await categoryService.GetOne(id, next);
 
@@ -45,8 +46,9 @@ export async function create(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function update(req: Request, res: Response, next: NextFunction) {
+  const id = parseInt(req.params.id, 10);
+
   try {
-    const id = parseInt(req.params.id, 10);
 
     const updatedCategory = await categoryService.Update(id, req.body, next);
 
@@ -59,8 +61,9 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+  const id = parseInt(req.params.id, 10);
+
   try {
-    const id = parseInt(req.params.id, 10);
 
     const deletedCategory  = await categoryService.Delete(id, next);
 

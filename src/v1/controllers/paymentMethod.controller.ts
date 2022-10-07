@@ -29,8 +29,9 @@ export async function create(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function update(req: Request, res: Response, next: NextFunction) {
+  const id = parseInt(req.params.id, 10);
+
   try {
-    const id = parseInt(req.params.id, 10);
 
     const updatedPaymentMethod = await paymentMethodService.Update(id, req.body, next);
 
@@ -43,8 +44,9 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+  const id = parseInt(req.params.id, 10);
+
   try {
-    const id = parseInt(req.params.id, 10);
 
     const deletedPaymentMethod = await paymentMethodService.Delete(id, next);
 

@@ -4,20 +4,20 @@ import { InternalServerException, NotFoundException } from '../exceptions';
 import * as productService from '../services/product.service';
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
+  let query: Partial<IQuery> = {};
+
+  if (Object.entries(req.query).length !== 0) {
+    const provider = req.query.provider?.toString().split(',');
+    const category = req.query.category?.toString().split(',');
+
+    query = {
+      q: req.query.q as string,
+      category: category ? category : [],
+      provider: provider ? provider : [],
+    };
+  }
+
   try {
-    let query: Partial<IQuery> = {};
-
-    if (Object.entries(req.query).length !== 0) {
-      const provider = req.query.provider?.toString().split(',');
-      const category = req.query.category?.toString().split(',');
-
-      query = {
-        q: req.query.q as string,
-        category: category ? category : [],
-        provider: provider ? provider : [],
-      };
-    }
-
     if (Object.entries(query).length !== 0) {
       const productsQuery = await productService.GetByQuery(query, next);
 
@@ -41,8 +41,9 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function getById(req: Request, res: Response, next: NextFunction) {
+  const { id } = req.params;
+
   try {
-    const { id } = req.params;
 
     const uniqueProduct = await productService.GetById(id, next);
 
@@ -69,8 +70,9 @@ export async function create(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function update(req: Request, res: Response, next: NextFunction) {
+  const { id } = req.params;
+
   try {
-    const { id } = req.params;
 
     const updatedProduct = await productService.Update(id, req.body, next);
 
@@ -84,8 +86,9 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+  const { id } = req.params;
+
   try {
-    const { id } = req.params;
 
     const removed = await productService.Delete(id, next);
 
