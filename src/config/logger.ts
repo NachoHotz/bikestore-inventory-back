@@ -1,4 +1,5 @@
 import winston from 'winston';
+import { NodeEnvs } from './constants';
 import { envConfig } from './env';
 
 const { NODE_ENV } = envConfig;
@@ -20,7 +21,7 @@ export const logger = winston.createLogger({
 // If we're not in production then log to the `console` with the format:
 // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
 //
-if (NODE_ENV !== 'production') {
+if (NODE_ENV !== NodeEnvs.production) {
   logger.add(new winston.transports.Console({
     format: winston.format.simple(),
   }));
