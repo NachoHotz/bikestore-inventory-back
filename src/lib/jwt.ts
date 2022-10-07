@@ -11,6 +11,6 @@ export function createToken(data: User, tokenType: TokenType) {
   return jwtOptsSign[tokenType as keyof typeof jwtOptsSign](dataStoredInToken);
 }
 
-export function decodeToken(token: string, tokenType: string) {
+export function decodeToken(token: string, tokenType: TokenType) {
   return jwtOptsDecode[tokenType as keyof typeof jwtOptsDecode](token);
 }

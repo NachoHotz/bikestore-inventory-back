@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { prisma } from '../../config';
+import { prisma, TokenType } from '../../config';
 import { RequestExtended } from '../../interfaces';
 import { decodeToken } from '../../lib/jwt';
 import { InvalidTokenException, MissingTokenException } from '../exceptions';
@@ -8,16 +8,16 @@ export async function verifyAcessJwt(req: Request, _res: Response, next: NextFun
   const token = req.cookies['session_token'];
 
   if (!token || token === '') {
-    return next(new MissingTokenException('access'));
+    return next(new MissingTokenException(TokenType.access));
   }
 
   try {
-    const userInfo = decodeToken(token, 'access');
+    const userInfo = decodeToken(token, TokenType.access);
 
     const userInDB = await prisma.user.findUnique({ where: { email: userInfo.email } });
 
     if (!userInDB) {
-      return next(new InvalidTokenException('access'));
+      return next(new InvalidTokenException(TokenType.access));
     }
 
   } catch (error: any) {
@@ -28,22 +28,22 @@ export async function verifyAcessJwt(req: Request, _res: Response, next: NextFun
 }
 export async function verifyRefreshJwt(req: RequestExtended, _res: Response, next: NextFunction) {
   if (!req.cookies['refresh_token']) {
-    return next(new MissingTokenException('refresh'));
+    return next(new MissingTokenException(TokenType.refresh));
   }
 
   const refreshToken = req.cookies['refresh_token'];
 
   try {
-    const decodedRefreshToken = decodeToken(refreshToken, 'refresh');
+    const decodedRefreshToken = decodeToken(refreshToken, TokenType.refresh);
     const user = await prisma.user.findUnique({ where: { email: decodedRefreshToken.email } });
 
     if (!user) {
-      return next(new InvalidTokenException('refresh'));
+      return next(new InvalidTokenException(TokenType.refresh));
     }
 
     req.user = user;
   } catch (error: any) {
-    return next(new InvalidTokenException('refrehs', error));
+    return next(new InvalidTokenException(TokenType.refresh, error));
   }
   next();
 }
