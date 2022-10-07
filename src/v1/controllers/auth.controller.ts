@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerException } from '../exceptions';
-import { envConfig } from '../../config';
-import * as authService from '../services/auth.service';
+import { envConfig, TokenType } from '../../config';
 import { createToken } from '../../lib';
 import { RequestExtended } from '../../interfaces';
+import * as authService from '../services/auth.service';
 
 const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
 
@@ -73,7 +73,7 @@ export function refreshAccessToken(req: RequestExtended, res: Response, next: Ne
   const { user } = req;
 
   try {
-    const access_token = createToken(user!, 'access');
+    const access_token = createToken(user!, TokenType.access);
 
     res.cookie('session_token', access_token, {
       httpOnly: true,

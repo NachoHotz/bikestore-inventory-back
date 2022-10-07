@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { CreatePaymentMethodSchema, UpdatePaymentMethodSchema } from '../../../prisma/validations/PaymentMethod';
-import * as controller from '../controllers/paymentMethod.controller';
 import { validateSchema } from '../middlewares/validateSchema.middleware';
+import * as controller from '../controllers/paymentMethod.controller';
 
 const paymentMethodsRouter = Router();
 

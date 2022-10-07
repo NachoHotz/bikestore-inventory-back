@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { CreateSaleSchema, UpdateSaleSchema } from '../../../prisma/validations/Sale';
-import * as controller from '../controllers/sale.controller';
 import { validateSchema } from '../middlewares/validateSchema.middleware';
+import * as controller from '../controllers/sale.controller';
 
 const salesRouter = Router();
 

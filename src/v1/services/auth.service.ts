@@ -1,7 +1,7 @@
 import { NextFunction } from 'express';
 import { User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { prisma } from '../../config';
+import { prisma, TokenType } from '../../config';
 import { BadRequestException, InternalServerException, InvalidCredentialsException } from '../exceptions';
 import { createToken } from '../../lib/jwt';
 
@@ -19,8 +19,8 @@ export async function Login(loginCredentials: User, next: NextFunction) {
       return next(new InvalidCredentialsException('Correo o contraseña incorrectos'));
     }
 
-    const access_token = createToken(userExists, 'access');
-    const refresh_token = createToken(userExists, 'refresh');
+    const access_token = createToken(userExists, TokenType.access);
+    const refresh_token = createToken(userExists, TokenType.refresh);
 
     return { access_token, refresh_token, current_user: userExists };
   } catch (error: any) {
@@ -40,8 +40,8 @@ export async function SignUp(signUpInfo: User, next: NextFunction) {
 
     const createdUser = await prisma.user.create({ data: { ...signUpInfo, password: passwordHashed } });
 
-    const access_token = createToken(createdUser, 'access');
-    const refresh_token = createToken(createdUser, 'refresh');
+    const access_token = createToken(createdUser, TokenType.access);
+    const refresh_token = createToken(createdUser, TokenType.refresh);
 
     return { access_token, refresh_token, current_user: createdUser };
   } catch (error: any) {

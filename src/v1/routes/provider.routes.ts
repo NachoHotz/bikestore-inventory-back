@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { CreateProviderSchema } from '../../../prisma/validations/Provider';
 import { UpdateProviderSchema } from '../../../prisma/validations/Provider/UpdateProvider.schema';
-import * as controller from '../controllers/provider.controller';
 import { validateSchema } from '../middlewares/validateSchema.middleware';
+import * as controller from '../controllers/provider.controller';
 
 const providersRouter = Router();
 
