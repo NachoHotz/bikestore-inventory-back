@@ -12,7 +12,7 @@ export async function GetAll(next: NextFunction) {
             product: true
           }
         },
-        PaymentMethod: true,
+        paymentMethod: true,
       }
     });
 
@@ -62,7 +62,7 @@ export async function Create(newSaleInfo: Sale, products: string[], next: NextFu
             product: true
           }
         },
-        PaymentMethod: true
+        paymentMethod: true
       }
     });
   } catch (error: any) {
@@ -82,7 +82,7 @@ export async function Update(id: number, newSalesInfo: Sale, next: NextFunction)
       where: { id },
       data: newSalesInfo,
       include: {
-        PaymentMethod: true, products: {
+        paymentMethod: true, products: {
           include: {
             product: true
           }
