@@ -80,7 +80,6 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
     return res.status(200).send({ status: 200, message: 'Producto actualizado con éxito', updatedProduct });
   } catch (error: any) {
-    /* handle error */
     return next(new InternalServerException(`Error updateProduct controller: ${error.message}`));
   }
 }
