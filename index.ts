@@ -8,7 +8,7 @@ app.listen(API_PORT || 3001, () => {
     logger.info('Database connection successfull');
     logger.info(`Server running on PORT ${API_PORT || 3001} in ${NODE_ENV} mode`);
   }).catch((error) => {
-    logger.error(`Database connection error: ${error}`);
+    logger.error(`Database connection ${error}`);
     process.exit(0);
   });
 });
