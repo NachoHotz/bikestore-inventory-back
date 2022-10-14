@@ -1,6 +1,6 @@
 type IFilterORFields = {
-  category?: string[] | undefined
-  provider?: string[] | undefined,
+  category: string[] | undefined
+  provider: string[] | undefined,
 }
 
 export function setWhereOpts(query: IFilterORFields) {
