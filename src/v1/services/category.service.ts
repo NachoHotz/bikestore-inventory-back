@@ -1,4 +1,4 @@
-import { prisma } from '../../config';
+import { prisma } from '../../common/config';
 import { NextFunction } from 'express';
 import { BadRequestException, InternalServerException } from '../exceptions';
 import { Category } from '@prisma/client';

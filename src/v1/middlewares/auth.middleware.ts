@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { prisma, TokenType } from '../../config';
-import { RequestExtended } from '../../interfaces';
-import { decodeToken } from '../../lib/jwt';
+import { prisma, TokenType } from '../../common/config';
+import { RequestExtended } from '../../common/interfaces';
+import { decodeToken } from '../../common/lib/jwt';
 import { InvalidTokenException, MissingTokenException } from '../exceptions';
 
 export async function verifyAcessJwt(req: Request, _res: Response, next: NextFunction) {

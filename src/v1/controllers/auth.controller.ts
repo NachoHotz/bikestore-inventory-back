@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerException } from '../exceptions';
-import { envConfig, TokenType } from '../../config';
-import { createToken } from '../../lib';
-import { RequestExtended } from '../../interfaces';
+import { envConfig, TokenType } from '../../common/config';
+import { createToken } from '../../common/lib';
+import { RequestExtended } from '../../common/interfaces';
 import * as authService from '../services/auth.service';
 
 const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;

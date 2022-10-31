@@ -1,5 +1,5 @@
 import app from './src/app';
-import { envConfig, logger, prisma } from './src/config';
+import { envConfig, logger, prisma } from './src/common/config';
 
 const { API_PORT, NODE_ENV } = envConfig;
 

@@ -1,6 +1,6 @@
 import { PaymentMethod } from '@prisma/client';
 import { NextFunction } from 'express';
-import { prisma } from '../../config';
+import { prisma } from '../../common/config';
 import { BadRequestException, InternalServerException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {

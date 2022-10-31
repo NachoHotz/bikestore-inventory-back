@@ -1,6 +1,6 @@
 import { NextFunction } from 'express';
 import { Provider } from '@prisma/client';
-import { prisma } from '../../config';
+import { prisma } from '../../common/config';
 import { BadRequestException, InternalServerException, NotFoundException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {

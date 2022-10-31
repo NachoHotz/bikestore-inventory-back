@@ -1,9 +1,9 @@
 import { NextFunction } from 'express';
 import { User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { prisma, TokenType } from '../../config';
+import { prisma, TokenType } from '../../common/config';
 import { BadRequestException, InternalServerException, InvalidCredentialsException } from '../exceptions';
-import { createToken } from '../../lib/jwt';
+import { createToken } from '../../common/lib/jwt';
 
 export async function Login(loginCredentials: User, next: NextFunction) {
   try {

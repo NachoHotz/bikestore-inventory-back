@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { IQuery } from '../../interfaces';
+import { IQuery } from '../../common/interfaces';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as productService from '../services/product.service';
 

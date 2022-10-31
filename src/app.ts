@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import errorMiddleware from './v1/middlewares/error.middleware';
 import v1MainRouter from './v1/routes/index.routes';
-import { corsOptions, envConfig, NodeEnvs } from './config/';
+import { corsOptions, envConfig, NodeEnvs } from './common/config/';
 import { NotFoundException } from './v1/exceptions';
 
 const app: Application = express();

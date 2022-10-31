@@ -1,7 +1,7 @@
 import { Product } from '@prisma/client';
 import { NextFunction } from 'express';
-import { prisma } from '../../config';
-import { IQuery } from '../../interfaces';
+import { prisma } from '../../common/config';
+import { IQuery } from '../../common/interfaces';
 import { BadRequestException, InternalServerException, NotFoundException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {
