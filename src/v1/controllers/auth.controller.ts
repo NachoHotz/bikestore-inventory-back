@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
-import { BadRequestException, InternalServerException } from '../exceptions';
+import { InternalServerException } from '../exceptions';
 import { envConfig, TokenType } from '../../common/config';
 import { createToken } from '../../common/lib';
 import { RequestExtended } from '../../common/interfaces';
