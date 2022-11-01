@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
-import { InternalServerException } from '../exceptions';
+import { BadRequestException, InternalServerException } from '../exceptions';
 import { envConfig, TokenType } from '../../common/config';
 import { createToken } from '../../common/lib';
 import { RequestExtended } from '../../common/interfaces';
@@ -72,8 +72,12 @@ export async function logOut(_req: Request, res: Response) {
 export function refreshAccessToken(req: RequestExtended, res: Response, next: NextFunction) {
   const { user } = req;
 
+  if (!user) {
+    return next(new InternalServerException('No user obtained by JWT decoding.'));
+  }
+
   try {
-    const access_token = createToken(user!, TokenType.access);
+    const access_token = createToken(user, TokenType.access);
 
     res.cookie('session_token', access_token, {
       httpOnly: true,
