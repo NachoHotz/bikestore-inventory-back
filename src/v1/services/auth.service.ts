@@ -19,10 +19,10 @@ export async function Login(loginCredentials: User, next: NextFunction) {
       return next(new InvalidCredentialsException('Correo o contraseña incorrectos'));
     }
 
-    const access_token = createToken(userExists, TokenType.access);
+    const session_token = createToken(userExists, TokenType.session);
     const refresh_token = createToken(userExists, TokenType.refresh);
 
-    return { access_token, refresh_token, current_user: userExists };
+    return { session_token, refresh_token, current_user: userExists };
   } catch (error: any) {
     return next(new InternalServerException(`Error Login Service: ${error.message}`));
   }
@@ -40,10 +40,10 @@ export async function SignUp(signUpInfo: User, next: NextFunction) {
 
     const createdUser = await prisma.user.create({ data: { ...signUpInfo, password: passwordHashed } });
 
-    const access_token = createToken(createdUser, TokenType.access);
+    const session_token = createToken(createdUser, TokenType.session);
     const refresh_token = createToken(createdUser, TokenType.refresh);
 
-    return { access_token, refresh_token, current_user: createdUser };
+    return { session_token, refresh_token, current_user: createdUser };
   } catch (error: any) {
     return next(new InternalServerException(`Error SignUp service: ${error.message}`));
   }

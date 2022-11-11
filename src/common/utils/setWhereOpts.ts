@@ -1,9 +1,8 @@
-type IFilterORFields = {
-  category: string[] | undefined
-  provider: string[] | undefined,
-}
+import { IQuery } from '../interfaces';
 
-export function setWhereOpts(query: IFilterORFields) {
+type IQueryPick = Pick<IQuery, 'category' | 'provider'>
+
+export function setWhereOpts(query: IQueryPick) {
   const filterFields = [];
 
   for (const key in query) {

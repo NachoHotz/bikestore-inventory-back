@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerException } from '../exceptions';
-import { envConfig, TokenType } from '../../common/config';
+import { CookieType, envConfig, TokenType } from '../../common/config';
 import { createToken } from '../../common/lib';
 import { RequestExtended } from '../../common/interfaces';
 import * as authService from '../services/auth.service';
@@ -14,14 +14,14 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     if (!userInfo) return;
 
-    res.cookie('session_token', userInfo.access_token, {
+    res.cookie(CookieType.session, userInfo.session_token, {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
       expires: new Date(Date.now())
     });
 
-    res.cookie('refresh_token', userInfo.refresh_token, {
+    res.cookie(CookieType.refresh, userInfo.refresh_token, {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
@@ -42,18 +42,18 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
       return next(new InternalServerException('Hubo un error en el registro. Por favor intenta nuevamente'));
     }
 
-    res.cookie('session_token', userInfo.access_token, {
+    res.cookie(CookieType.session, userInfo.session_token, {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
-      expires: new Date(Date.now() + JWT_ACCESS_TOKEN_EXP)
+      // expires: new Date(Date.now() + JWT_ACCESS_TOKEN_EXP)
     });
 
-    res.cookie('refresh_token', userInfo.refresh_token, {
+    res.cookie(CookieType.refresh, userInfo.refresh_token, {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
-      expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP)
+      // expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP)
     });
 
     return res.status(200).send({ user: { ...userInfo.current_user, password: null } });
@@ -63,8 +63,8 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function logOut(_req: Request, res: Response) {
-  res.clearCookie('session_token');
-  res.clearCookie('refresh_token');
+  res.clearCookie(CookieType.session);
+  res.clearCookie(CookieType.refresh);
 
   return res.sendStatus(204);
 }
@@ -77,9 +77,9 @@ export function refreshAccessToken(req: RequestExtended, res: Response, next: Ne
   }
 
   try {
-    const access_token = createToken(user, TokenType.access);
+    const session_token = createToken(user, TokenType.session);
 
-    res.cookie('session_token', access_token, {
+    res.cookie(CookieType.session, session_token, {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
