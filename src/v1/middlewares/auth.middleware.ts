@@ -5,7 +5,7 @@ import { decodeToken } from '../../common/lib/jwt';
 import { InvalidTokenException, MissingTokenException } from '../exceptions';
 
 export async function verifyAcessJwt(req: Request, _res: Response, next: NextFunction) {
-  const token = req.cookies[CookieType.session];
+  const token: string = req.cookies[CookieType.session];
 
   if (!token || token === '') {
     return next(new MissingTokenException(TokenType.session));
@@ -31,7 +31,7 @@ export async function verifyRefreshJwt(req: RequestExtended, _res: Response, nex
     return next(new MissingTokenException(TokenType.refresh));
   }
 
-  const refreshToken = req.cookies[CookieType.refresh];
+  const refreshToken: string = req.cookies[CookieType.refresh];
 
   try {
     const decodedRefreshToken = decodeToken(refreshToken, TokenType.refresh);
