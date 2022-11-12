@@ -21,7 +21,7 @@ export async function verifyAcessJwt(req: Request, _res: Response, next: NextFun
     }
 
   } catch (error: any) {
-    return next(new InvalidTokenException(error));
+    return next(new InvalidTokenException(TokenType.session, error.message));
   }
 
   next();
@@ -43,7 +43,7 @@ export async function verifyRefreshJwt(req: RequestExtended, _res: Response, nex
 
     req.user = user;
   } catch (error: any) {
-    return next(new InvalidTokenException(TokenType.refresh, error));
+    return next(new InvalidTokenException(TokenType.refresh, error.message));
   }
   next();
 }

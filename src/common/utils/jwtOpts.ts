@@ -14,7 +14,7 @@ export const jwtOptsSign = {
 };
 
 export const jwtOptsDecode = {
-  access(token: string) {
+  session(token: string) {
     return jwt.verify(token, JWT_ACCESS_TOKEN_SECRET) as DataStoredInToken;
   },
   refresh(token: string) {
