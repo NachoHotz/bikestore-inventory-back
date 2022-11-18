@@ -2,8 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { IQuery } from '../../common/interfaces';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as productService from '../services/product.service';
+import { CreateProductResponse, DeleteProductResponse, GetAllProductsResponse, GetOneProductResponse, UpdateProductResponse } from '../types/responses/product';
 
-export async function getAll(req: Request, res: Response, next: NextFunction) {
+export async function getAll(req: Request, res: Response<GetAllProductsResponse>, next: NextFunction) {
   let query: Partial<IQuery> = {};
 
   if (Object.entries(req.query).length !== 0) {
@@ -40,7 +41,7 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function getById(req: Request, res: Response, next: NextFunction) {
+export async function getById(req: Request, res: Response<GetOneProductResponse>, next: NextFunction) {
   const { id } = req.params;
 
   try {
@@ -57,7 +58,7 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function create(req: Request, res: Response, next: NextFunction) {
+export async function create(req: Request, res: Response<CreateProductResponse>, next: NextFunction) {
   try {
     const createdProduct = await productService.Create(req.body, next);
 
@@ -69,7 +70,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function update(req: Request, res: Response, next: NextFunction) {
+export async function update(req: Request, res: Response<UpdateProductResponse>, next: NextFunction) {
   const { id } = req.params;
 
   try {
@@ -84,16 +85,16 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+export async function deleteOne(req: Request, res: Response<DeleteProductResponse>, next: NextFunction) {
   const { id } = req.params;
 
   try {
 
-    const removed = await productService.Delete(id, next);
+    const deletedProduct = await productService.Delete(id, next);
 
-    if (!removed) return;
+    if (!deletedProduct) return;
 
-    return res.status(200).send({ status: 200, message: 'Producto eliminado con éxito' });
+    return res.status(200).send({ status: 200, message: 'Producto eliminado con éxito', deletedProduct });
   } catch (error: any) {
     return next(new InternalServerException(`Error deleteProduct controller: ${error.message}`));
   }

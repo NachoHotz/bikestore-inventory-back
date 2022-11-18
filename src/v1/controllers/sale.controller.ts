@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as saleService from '../services/sale.service';
+import { CreateSaleResponse, DeleteSaleResponse, GetAllSalesResponse, UpdateSaleResponse } from '../types/responses/sale';
 
-export async function getAll(_req: Request, res: Response, next: NextFunction) {
+export async function getAll(_req: Request, res: Response<GetAllSalesResponse>, next: NextFunction) {
   try {
     const allSales = await saleService.GetAll(next);
 
@@ -16,7 +17,7 @@ export async function getAll(_req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function create(req: Request, res: Response, next: NextFunction) {
+export async function create(req: Request, res: Response<CreateSaleResponse>, next: NextFunction) {
   try {
     const createdSale = await saleService.Create(req.body, req.body.products, next);
 
@@ -28,7 +29,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function update(req: Request, res: Response, next: NextFunction) {
+export async function update(req: Request, res: Response<UpdateSaleResponse>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -43,7 +44,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+export async function deleteOne(req: Request, res: Response<DeleteSaleResponse>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -51,7 +52,7 @@ export async function deleteOne(req: Request, res: Response, next: NextFunction)
 
     if (!deletedSale) return;
 
-    return res.status(200).send({ status: 200, message: 'Venta eliminada con éxito' });
+    return res.status(200).send({ status: 200, message: 'Venta eliminada con éxito', deletedSale });
   } catch (error: any) {
     return next(new InternalServerException(`Error deleteSale controller: ${error.message}`));
   }

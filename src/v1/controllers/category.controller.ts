@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
+import { CreateCategory, DeleteCategory, GetAllCategories, GetOneCategory, UpdateCategory } from '../types/responses/category';
 import * as categoryService from '../services/category.service';
 
-export async function getAll(_req: Request, res: Response, next: NextFunction) {
+export async function getAll(_req: Request, res: Response<GetAllCategories>, next: NextFunction) {
   try {
     const allCategories = await categoryService.GetAll(next);
 
@@ -16,7 +17,7 @@ export async function getAll(_req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function getOne(req: Request, res: Response, next: NextFunction){
+export async function getOne(req: Request, res: Response<GetOneCategory>, next: NextFunction){
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -33,7 +34,7 @@ export async function getOne(req: Request, res: Response, next: NextFunction){
   }
 }
 
-export async function create(req: Request, res: Response, next: NextFunction) {
+export async function create(req: Request, res: Response<CreateCategory>, next: NextFunction) {
   try {
     const createdCategory = await categoryService.Create(req.body, next);
 
@@ -45,7 +46,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function update(req: Request, res: Response, next: NextFunction) {
+export async function update(req: Request, res: Response<UpdateCategory>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -60,7 +61,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+export async function deleteOne(req: Request, res: Response<DeleteCategory>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -69,7 +70,7 @@ export async function deleteOne(req: Request, res: Response, next: NextFunction)
 
     if (!deletedCategory) return;
 
-    return res.status(200).send({ status:200, message: 'Categoria eliminada con éxito' });
+    return res.status(200).send({ status:200, message: 'Categoria eliminada con éxito', deletedCategory });
   } catch (error: any) {
     return next(new InternalServerException(`Error deleteCategory controller: ${error.message}`));
   }

@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as providerService from '../services/provider.service';
+import { CreateProviderResponse, DeleteProviderResponse, GetAllProvidersResponse, GetOneProviderResponse, UpdateProviderResponse } from '../types/responses/provider';
 
-export async function getAll(_req: Request, res: Response, next: NextFunction) {
+export async function getAll(_req: Request, res: Response<GetAllProvidersResponse>, next: NextFunction) {
   try {
     const allProviders = await providerService.GetAll(next);
 
@@ -16,7 +17,7 @@ export async function getAll(_req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function getOne(req: Request, res: Response, next: NextFunction) {
+export async function getOne(req: Request, res: Response<GetOneProviderResponse>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -33,7 +34,7 @@ export async function getOne(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function create(req: Request, res: Response, next: NextFunction) {
+export async function create(req: Request, res: Response<CreateProviderResponse>, next: NextFunction) {
   try {
     const createdProvider = await providerService.Create(req.body, next);
 
@@ -45,7 +46,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function update(req: Request, res: Response, next: NextFunction) {
+export async function update(req: Request, res: Response<UpdateProviderResponse>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -60,7 +61,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+export async function deleteOne(req: Request, res: Response<DeleteProviderResponse>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -69,7 +70,7 @@ export async function deleteOne(req: Request, res: Response, next: NextFunction)
 
     if (!deletedProvider) return;
 
-    return res.status(200).send({ status: 200, message: 'Proveedor eliminado con éxito' });
+    return res.status(200).send({ status: 200, message: 'Proveedor eliminado con éxito', deletedProvider });
   } catch (error: any) {
     return next(new InternalServerException(`Error deleteProvider controller: ${error.message}`));
   }
