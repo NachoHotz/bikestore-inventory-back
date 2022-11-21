@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
-import * as saleService from '../services/sale.service';
 import { CreateSaleResponse, DeleteSaleResponse, GetAllSalesResponse, UpdateSaleResponse } from '../types/responses/sale';
+import * as saleService from '../services/sale.service';
 
 export async function getAll(_req: Request, res: Response<GetAllSalesResponse>, next: NextFunction) {
   try {

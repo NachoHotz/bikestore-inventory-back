@@ -46,14 +46,14 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
-      // expires: new Date(Date.now() + JWT_ACCESS_TOKEN_EXP)
+      expires: new Date(Date.now() + JWT_ACCESS_TOKEN_EXP)
     });
 
     res.cookie(CookieType.refresh, userInfo.refresh_token, {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
-      // expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP)
+      expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP)
     });
 
     return res.status(200).send({ user: { ...userInfo.current_user, password: null } });

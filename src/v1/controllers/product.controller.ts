@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { IQuery } from '../../common/interfaces';
 import { InternalServerException, NotFoundException } from '../exceptions';
-import * as productService from '../services/product.service';
 import { CreateProductResponse, DeleteProductResponse, GetAllProductsResponse, GetOneProductResponse, UpdateProductResponse } from '../types/responses/product';
+import * as productService from '../services/product.service';
 
 export async function getAll(req: Request, res: Response<GetAllProductsResponse>, next: NextFunction) {
   let query: Partial<IQuery> = {};
