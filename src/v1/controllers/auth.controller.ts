@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerException } from '../exceptions';
-import { CookieType, envConfig, TokenType } from '../../common/config';
+import { CookieType, TokenType } from '../../common/config';
 import { createToken } from '../../common/lib';
 import { RequestExtended } from '../../common/interfaces';
-import * as authService from '../services/auth.service';
 import { LoginResponse, SignUpResponse } from '../types/responses/auth';
-
-const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
+import { RefreshCookieOpts, SessionCookieOpts } from '../../common/config';
+import * as authService from '../services/auth.service';
 
 export async function login(req: Request, res: Response<LoginResponse>, next: NextFunction) {
   try {
@@ -15,19 +14,8 @@ export async function login(req: Request, res: Response<LoginResponse>, next: Ne
 
     if (!userInfo) return;
 
-    res.cookie(CookieType.session, userInfo.session_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-      expires: new Date(Date.now())
-    });
-
-    res.cookie(CookieType.refresh, userInfo.refresh_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-      expires: new Date(Date.now())
-    });
+    res.cookie(CookieType.session, userInfo.session_token, SessionCookieOpts);
+    res.cookie(CookieType.refresh, userInfo.refresh_token, RefreshCookieOpts);
 
     return res.status(200).send({ status: 200, user: userInfo.current_user });
   } catch (error: any) {
@@ -43,19 +31,8 @@ export async function signUp(req: Request, res: Response<SignUpResponse>, next: 
       return next(new InternalServerException('Hubo un error en el registro. Por favor intenta nuevamente'));
     }
 
-    res.cookie(CookieType.session, userInfo.session_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-      expires: new Date(Date.now() + JWT_ACCESS_TOKEN_EXP)
-    });
-
-    res.cookie(CookieType.refresh, userInfo.refresh_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-      expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP)
-    });
+    res.cookie(CookieType.session, userInfo.session_token, SessionCookieOpts);
+    res.cookie(CookieType.refresh, userInfo.refresh_token, RefreshCookieOpts);
 
     return res.status(200).send({ status: 200, user: userInfo.current_user });
   } catch (error: any) {
@@ -80,11 +57,7 @@ export function refreshAccessToken(req: RequestExtended, res: Response, next: Ne
   try {
     const session_token = createToken(user, TokenType.session);
 
-    res.cookie(CookieType.session, session_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-    });
+    res.cookie(CookieType.session, session_token, SessionCookieOpts);
 
     return res.sendStatus(204);
   } catch (error: any) {
