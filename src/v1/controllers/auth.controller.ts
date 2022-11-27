@@ -29,7 +29,7 @@ export async function login(req: Request, res: Response<LoginResponse>, next: Ne
       expires: new Date(Date.now())
     });
 
-    return res.status(200).send({status: 200 , user: userInfo.current_user });
+    return res.status(200).send({ status: 200, user: userInfo.current_user });
   } catch (error: any) {
     return next(new InternalServerException(`Error login controller: ${error.message}`));
   }
