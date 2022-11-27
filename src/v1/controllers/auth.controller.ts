@@ -5,10 +5,11 @@ import { CookieType, envConfig, TokenType } from '../../common/config';
 import { createToken } from '../../common/lib';
 import { RequestExtended } from '../../common/interfaces';
 import * as authService from '../services/auth.service';
+import { LoginResponse, SignUpResponse } from '../types/responses/auth';
 
 const { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } = envConfig;
 
-export async function login(req: Request, res: Response, next: NextFunction) {
+export async function login(req: Request, res: Response<LoginResponse>, next: NextFunction) {
   try {
     const userInfo = await authService.Login(req.body, next);
 
@@ -28,13 +29,13 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       expires: new Date(Date.now())
     });
 
-    return res.status(200).send({ user: { ...userInfo.current_user, password: null } });
+    return res.status(200).send({status: 200 , user: userInfo.current_user });
   } catch (error: any) {
     return next(new InternalServerException(`Error login controller: ${error.message}`));
   }
 }
 
-export async function signUp(req: Request, res: Response, next: NextFunction) {
+export async function signUp(req: Request, res: Response<SignUpResponse>, next: NextFunction) {
   try {
     const userInfo = await authService.SignUp(req.body, next);
 
@@ -56,7 +57,7 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
       expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP)
     });
 
-    return res.status(200).send({ user: { ...userInfo.current_user, password: null } });
+    return res.status(200).send({ status: 200, user: userInfo.current_user });
   } catch (error: any) {
     return next(new InternalServerException(`Error signUp controller: ${error.message}`));
   }
@@ -89,5 +90,4 @@ export function refreshAccessToken(req: RequestExtended, res: Response, next: Ne
   } catch (error: any) {
     return next(new InternalServerException(`Error refreshTokens controller: ${error.message}`));
   }
-
 }
