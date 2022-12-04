@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
-import { CreateCategoryResponse, DeleteCategoryResponse, GetAllCategoriesResponse, GetOneCategoryResponse, UpdateCategoryResponse } from '../types/responses/category';
+import {
+  CreateCategoryResponse,
+  DeleteCategoryResponse,
+  GetAllCategoriesResponse,
+  GetOneCategoryResponse,
+  UpdateCategoryResponse
+} from '../types/responses/category';
 import * as categoryService from '../services/category.service';
 
 export async function getAll(_req: Request, res: Response<GetAllCategoriesResponse>, next: NextFunction) {

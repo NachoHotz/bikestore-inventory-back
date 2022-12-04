@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
-import { CreateProviderResponse, DeleteProviderResponse, GetAllProvidersResponse, GetOneProviderResponse, UpdateProviderResponse } from '../types/responses/provider';
+import {
+  CreateProviderResponse,
+  DeleteProviderResponse,
+  GetAllProvidersResponse,
+  GetOneProviderResponse,
+  UpdateProviderResponse
+} from '../types/responses/provider';
 import * as providerService from '../services/provider.service';
 
 export async function getAll(_req: Request, res: Response<GetAllProvidersResponse>, next: NextFunction) {
