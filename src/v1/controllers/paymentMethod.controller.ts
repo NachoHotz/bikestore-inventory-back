@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as paymentMethodService from '../services/paymentMethod.service';
+import { CreatePaymentMethodResponse, DeletePaymentMethodResponse, GetAllPaymentMethodsResponse, UpdatePaymentMethodResponse } from '../types/responses/payment-method';
 
-export async function getAll(_req: Request, res: Response, next: NextFunction) {
+export async function getAll(_req: Request, res: Response<GetAllPaymentMethodsResponse>, next: NextFunction) {
   try {
     const allPaymentMethods = await paymentMethodService.GetAll(next);
 
@@ -10,13 +11,13 @@ export async function getAll(_req: Request, res: Response, next: NextFunction) {
       return next(new NotFoundException('No se encontraron metodos de pago'));
     }
 
-    return res.status(200).send({ status: 200, allPaymentMethods });
+    return res.status(200).send({ status: 200, paymentMethods: allPaymentMethods });
   } catch (error: any) {
     return next(new InternalServerException(`Error getAllPaymentMethods controller: ${error.message}`));
   }
 }
 
-export async function create(req: Request, res: Response, next: NextFunction) {
+export async function create(req: Request, res: Response<CreatePaymentMethodResponse>, next: NextFunction) {
   try {
     const createdPaymentMethod = await paymentMethodService.Create(req.body, next);
 
@@ -28,7 +29,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function update(req: Request, res: Response, next: NextFunction) {
+export async function update(req: Request, res: Response<UpdatePaymentMethodResponse>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -43,7 +44,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function deleteOne(req: Request, res: Response, next: NextFunction) {
+export async function deleteOne(req: Request, res: Response<DeletePaymentMethodResponse>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -52,7 +53,7 @@ export async function deleteOne(req: Request, res: Response, next: NextFunction)
 
     if (!deletedPaymentMethod) return;
 
-    return res.status(200).send({ status: 200, message: 'Metodo de pago eliminado con éxito' });
+    return res.status(200).send({ status: 200, message: 'Metodo de pago eliminado con éxito', deletedPaymentMethod });
   } catch (error: any) {
     return next(new InternalServerException(`Error deletePaymentMethod controller: ${error.message}`));
   }
