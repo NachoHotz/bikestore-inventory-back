@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import * as paymentMethodService from '../services/paymentMethod.service';
-import { CreatePaymentMethodResponse, DeletePaymentMethodResponse, GetAllPaymentMethodsResponse, UpdatePaymentMethodResponse } from '../types/responses/payment-method';
+import {
+  CreatePaymentMethodResponse,
+  DeletePaymentMethodResponse,
+  GetAllPaymentMethodsResponse,
+  UpdatePaymentMethodResponse
+} from '../types/responses/payment-method';
 
 export async function getAll(_req: Request, res: Response<GetAllPaymentMethodsResponse>, next: NextFunction) {
   try {
