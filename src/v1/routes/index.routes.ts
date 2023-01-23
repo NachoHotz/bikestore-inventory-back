@@ -17,7 +17,7 @@ mainRouter.get('/', controller.rootController);
 
 mainRouter.use('/auth', authRouter);
 
-mainRouter.use(authMiddleware.verifyAcessJwt);
+mainRouter.use(authMiddleware.verifySessionJwt);
 mainRouter.use('/products', productsRouter);
 mainRouter.use('/providers', providersRouter);
 mainRouter.use('/payMethods', paymentMethodsRouter);

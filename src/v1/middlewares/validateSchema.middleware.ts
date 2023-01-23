@@ -2,7 +2,11 @@ import { AnyZodObject } from 'zod';
 import { Request, Response, NextFunction } from 'express';
 import { BadRequestException } from '../exceptions';
 
-export const validateSchema = (schema: AnyZodObject) => (req: Request, _res: Response, next: NextFunction) => {
+export const validateSchema = (schema: AnyZodObject) => (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
   try {
     schema.parse({
       body: req.body,
