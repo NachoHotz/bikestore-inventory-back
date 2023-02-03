@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerException } from '../exceptions';
-import { CookieType, TokenType } from '../../common/config';
+import {
+  CookieType,
+  TokenType,
+  RefreshCookieOpts,
+  SessionCookieOpts
+} from '../../common/config';
 import { createToken } from '../../common/lib';
 import { RequestExtended } from '../../common/interfaces';
 import { LoginResponse, SignUpResponse } from '../types/responses/auth';
-import { RefreshCookieOpts, SessionCookieOpts } from '../../common/config';
 import * as authService from '../services/auth.service';
 
 export async function login(req: Request, res: Response<LoginResponse>, next: NextFunction) {
