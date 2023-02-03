@@ -7,12 +7,12 @@ export const SessionCookieOpts: CookieOptions = {
   httpOnly: true,
   sameSite: 'lax',
   secure: true,
-  expires: new Date(Date.now() + JWT_ACCESS_TOKEN_EXP)
+  expires: 3600000
 };
 
 export const RefreshCookieOpts: CookieOptions = {
   httpOnly: true,
   sameSite: 'lax',
   secure: true,
-  expires: new Date(Date.now() + JWT_REFRESH_TOKEN_EXP)
+  expires: 86400000
 };
