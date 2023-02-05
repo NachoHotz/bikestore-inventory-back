@@ -1,10 +1,12 @@
 import { Product } from '@prisma/client';
 import { NextFunction } from 'express';
-import { prisma } from '../../common/config';
+import { logger, prisma } from '../../common/config';
 import { IQuery } from '../../common/interfaces';
 import { BadRequestException, InternalServerException, NotFoundException } from '../exceptions';
 
 export async function GetAll(next: NextFunction, filters?: Partial<IQuery>) {
+  logger.info({ filters })
+
   try {
     if (filters && Object.entries(filters).length !== 0) {
       return await prisma.product.findMany({
