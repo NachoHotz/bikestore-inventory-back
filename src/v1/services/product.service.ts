@@ -4,8 +4,43 @@ import { prisma } from '../../common/config';
 import { IQuery } from '../../common/interfaces';
 import { BadRequestException, InternalServerException, NotFoundException } from '../exceptions';
 
-export async function GetAll(next: NextFunction) {
+export async function GetAll(next: NextFunction, filters?: Partial<IQuery>) {
   try {
+    if (Object.values(filters).length !== 0) {
+      return await prisma.product.findMany({
+        where: {
+          AND: [
+            {
+              name: {
+                contains: filters?.q,
+                mode: 'insensitive'
+              },
+              description: {
+                contains: filters?.q,
+                mode: 'insensitive'
+              },
+              category: {
+                name: {
+                  in: filters?.category,
+                  mode: 'insensitive'
+                }
+              },
+              provider: {
+                name: {
+                  in: filters?.provider,
+                  mode: 'insensitive'
+                }
+              }
+            }
+          ]
+        },
+        include: {
+          category: true,
+          provider: true
+        }
+      })
+    }
+
     return await prisma.product.findMany({
       include: {
         category: true,
@@ -14,51 +49,6 @@ export async function GetAll(next: NextFunction) {
     });
   } catch (error: any) {
     return next(new InternalServerException(`Error GetAllProducts service: ${error.message}`));
-  }
-}
-
-export async function GetByQuery(query: Partial<IQuery>, next: NextFunction) {
-  try {
-    return await prisma.product.findMany({
-      where: {
-        OR: [
-          {
-            name: {
-              contains: query.q,
-              mode: 'insensitive'
-            }
-          },
-          {
-            description: {
-              contains: query.q,
-              mode: 'insensitive'
-            }
-          },
-          {
-            category: {
-              name: {
-                in: query.category,
-                mode: 'insensitive'
-              }
-            },
-          },
-          {
-            provider: {
-              name: {
-                in: query.provider,
-                mode: 'insensitive'
-              },
-            },
-          }
-        ],
-      },
-      include: {
-        category: true,
-        provider: true
-      }
-    });
-  } catch (error: any) {
-    return next(new InternalServerException(`Error GetByQuery service: ${error.message}`));
   }
 }
 

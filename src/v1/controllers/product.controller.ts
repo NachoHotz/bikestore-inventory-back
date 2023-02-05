@@ -25,17 +25,7 @@ export async function getAll(req: Request, res: Response<GetAllProductsResponse>
   }
 
   try {
-    if (Object.entries(query).length !== 0) {
-      const productsQuery = await productService.GetByQuery(query, next);
-
-      if (!productsQuery || productsQuery.length === 0) {
-        return next(new NotFoundException('No se encontraron productos'));
-      }
-
-      return res.status(200).send({ status: 200, productsQuery });
-    }
-
-    const allProducts = await productService.GetAll(next);
+    const allProducts = await productService.GetAll(next, query);
 
     if (!allProducts || allProducts.length === 0) {
       return next(new NotFoundException('No se encontraron productos'));
