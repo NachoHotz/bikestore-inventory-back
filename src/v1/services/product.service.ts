@@ -6,7 +6,7 @@ import { BadRequestException, InternalServerException, NotFoundException } from 
 
 export async function GetAll(next: NextFunction, filters?: Partial<IQuery>) {
   try {
-    if (Object.values(filters).length !== 0) {
+    if (filters && Object.values(filters).length !== 0) {
       return await prisma.product.findMany({
         where: {
           AND: [
