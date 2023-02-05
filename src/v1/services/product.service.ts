@@ -9,7 +9,7 @@ export async function GetAll(next: NextFunction, filters?: Partial<IQuery>) {
     if (filters && Object.values(filters).length !== 0) {
       return await prisma.product.findMany({
         where: {
-          AND: [
+          OR: [
             {
               name: {
                 contains: filters?.q,
