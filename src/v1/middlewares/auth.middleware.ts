@@ -4,7 +4,7 @@ import { RequestExtended } from '../../common/interfaces';
 import { decodeToken } from '../../common/lib/jwt';
 import { InvalidTokenException, MissingTokenException } from '../exceptions';
 
-export async function verifySessionJwt(req: Request, _res: Response, next: NextFunction) {
+export async function verifySessionToken(req: Request, _res: Response, next: NextFunction) {
   const token: string = req.cookies[CookieType.session];
 
   if (!token || token === '') {
@@ -26,7 +26,7 @@ export async function verifySessionJwt(req: Request, _res: Response, next: NextF
 
   next();
 }
-export async function verifyRefreshJwt(req: RequestExtended, _res: Response, next: NextFunction) {
+export async function verifyRefreshToken(req: RequestExtended, _res: Response, next: NextFunction) {
   if (!req.cookies[CookieType.refresh]) {
     return next(new MissingTokenException(TokenType.refresh));
   }
