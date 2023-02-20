@@ -51,7 +51,7 @@ export async function logOut(_req: Request, res: Response) {
   return res.sendStatus(204);
 }
 
-export function refreshAccessToken(req: RequestExtended, res: Response, next: NextFunction) {
+export function refreshSessionToken(req: RequestExtended, res: Response, next: NextFunction) {
   const { user } = req;
 
   if (!user) {
