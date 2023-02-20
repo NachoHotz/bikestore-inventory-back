@@ -9,7 +9,7 @@ const {
   JWT_REFRESH_TOKEN_EXP
 } = envConfig;
 
-export const jwtOptsSign = {
+export const jwtSignOpts = {
   session(dataStoredInToken: DataStoredInToken) {
     return jwt.sign(dataStoredInToken, JWT_ACCESS_TOKEN_SECRET, { expiresIn: JWT_ACCESS_TOKEN_EXP });
   },
@@ -18,7 +18,7 @@ export const jwtOptsSign = {
   }
 };
 
-export const jwtOptsDecode = {
+export const jwtDecodeOpts = {
   session(token: string) {
     return jwt.verify(token, JWT_ACCESS_TOKEN_SECRET) as DataStoredInToken;
   },
