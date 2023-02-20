@@ -1,15 +1,10 @@
+import { Category } from '@prisma/client';
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
-import {
-  CreateCategoryResponse,
-  DeleteCategoryResponse,
-  GetAllCategoriesResponse,
-  GetOneCategoryResponse,
-  UpdateCategoryResponse
-} from '../types/responses/category';
+import { BaseResponse } from '../types/responses/baseResponse';
 import * as categoryService from '../services/category.service';
 
-export async function getAll(_req: Request, res: Response<GetAllCategoriesResponse>, next: NextFunction) {
+export async function getAll(_req: Request, res: Response<BaseResponse<Category[]>>, next: NextFunction) {
   try {
     const allCategories = await categoryService.GetAll(next);
 
@@ -17,13 +12,13 @@ export async function getAll(_req: Request, res: Response<GetAllCategoriesRespon
       return next(new NotFoundException('No se han encontrado categorias'));
     }
 
-    return res.status(200).send({ status: 200, allCategories });
+    return res.status(200).send({ status: 200, data: allCategories });
   } catch (error: any) {
     return next(new InternalServerException(`Error getAllCategories controller: ${error.message}`));
   }
 }
 
-export async function getOne(req: Request, res: Response<GetOneCategoryResponse>, next: NextFunction) {
+export async function getOne(req: Request, res: Response<BaseResponse<Category>>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -34,25 +29,25 @@ export async function getOne(req: Request, res: Response<GetOneCategoryResponse>
       return next(new NotFoundException('No se encontro la categoria solicitada'));
     }
 
-    return res.status(200).send({ status: 200, uniqueCategory });
+    return res.status(200).send({ status: 200, data: uniqueCategory });
   } catch (error: any) {
     return next(new InternalServerException(`Error getOneCategory controller: ${error.message}`));
   }
 }
 
-export async function create(req: Request, res: Response<CreateCategoryResponse>, next: NextFunction) {
+export async function create(req: Request, res: Response<BaseResponse<Category>>, next: NextFunction) {
   try {
     const createdCategory = await categoryService.Create(req.body, next);
 
     if (!createdCategory) return;
 
-    return res.status(201).send({ status: 201, createdCategory });
+    return res.status(201).send({ status: 201, message: 'Categoria creada con exito', data: createdCategory });
   } catch (error: any) {
     return next(new InternalServerException(`Error createCategory controller: ${error.message}`));
   }
 }
 
-export async function update(req: Request, res: Response<UpdateCategoryResponse>, next: NextFunction) {
+export async function update(req: Request, res: Response<BaseResponse<Category>>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -61,13 +56,13 @@ export async function update(req: Request, res: Response<UpdateCategoryResponse>
 
     if (!updatedCategory) return;
 
-    return res.status(200).send({ status: 200, message: 'Categoria actualizada con éxito', updatedCategory });
+    return res.status(200).send({ status: 200, message: 'Categoria actualizada con éxito', data: updatedCategory });
   } catch (error: any) {
     return next(new InternalServerException(`Error updateCategory controller: ${error.message}`));
   }
 }
 
-export async function deleteOne(req: Request, res: Response<DeleteCategoryResponse>, next: NextFunction) {
+export async function deleteOne(req: Request, res: Response<BaseResponse<Category>>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -76,7 +71,7 @@ export async function deleteOne(req: Request, res: Response<DeleteCategoryRespon
 
     if (!deletedCategory) return;
 
-    return res.status(200).send({ status: 200, message: 'Categoria eliminada con éxito', deletedCategory });
+    return res.status(200).send({ status: 200, message: 'Categoria eliminada con éxito', data: deletedCategory });
   } catch (error: any) {
     return next(new InternalServerException(`Error deleteCategory controller: ${error.message}`));
   }

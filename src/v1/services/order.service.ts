@@ -5,7 +5,7 @@ import { BadRequestException, InternalServerException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {
   try {
-    const sales = await prisma.sale.findMany({
+    const orders = await prisma.sale.findMany({
       include: {
         products: {
           include: {
@@ -16,20 +16,20 @@ export async function GetAll(next: NextFunction) {
       }
     });
 
-    return sales.map((sale) => {
+    return orders.map((order) => {
       return {
-        ...sale,
-        products: sale.products.map((p) => p.product) // returns the acutal product info
+        ...order,
+        products: order.products.map((p) => p.product) // returns the acutal product info
       };
     });
   } catch (error: any) {
-    return next(new InternalServerException(`Error GetAllSales service: ${error.message}`));
+    return next(new InternalServerException(`Error GetAllOrders service: ${error.message}`));
   }
 }
 
 export async function Create(newSaleInfo: Sale, products: string[], next: NextFunction) {
   try {
-    const createdSale = await prisma.sale.create({
+    const createdOrder = await prisma.sale.create({
       data: {
         amount: newSaleInfo.amount,
         paymentMethodId: newSaleInfo.paymentMethodId,
@@ -46,15 +46,15 @@ export async function Create(newSaleInfo: Sale, products: string[], next: NextFu
 
     const assignedProductsArray = assignedProducts.map((product) => product.id);
 
-    const salesWithProducts = assignedProductsArray.map((product) => {
-      return { saleId: createdSale.id, productId: product };
+    const ordersWithProducts = assignedProductsArray.map((product) => {
+      return { orderId: createdOrder.id, productId: product };
     });
 
-    await prisma.productsOnSale.createMany({ data: salesWithProducts });
+    await prisma.productsOnSale.createMany({ data: ordersWithProducts });
 
     return await prisma.sale.findUnique({
       where: {
-        id: createdSale.id
+        id: createdOrder.id
       },
       include: {
         products: {
@@ -66,21 +66,21 @@ export async function Create(newSaleInfo: Sale, products: string[], next: NextFu
       }
     });
   } catch (error: any) {
-    return next(new InternalServerException(`Error CreateSale service: ${error.message}`));
+    return next(new InternalServerException(`Error CreateOrder service: ${error.message}`));
   }
 }
 
-export async function Update(id: number, newSalesInfo: Sale, next: NextFunction) {
+export async function Update(id: number, newOrderInfo: Sale, next: NextFunction) {
   try {
-    const saleExists = await prisma.sale.findUnique({ where: { id } });
+    const orderExists = await prisma.sale.findUnique({ where: { id } });
 
-    if (!saleExists) {
+    if (!orderExists) {
       return next(new BadRequestException('No no se encontro la venta solicitada'));
     }
 
     return await prisma.sale.update({
       where: { id },
-      data: newSalesInfo,
+      data: newOrderInfo,
       include: {
         paymentMethod: true, products: {
           include: {
@@ -90,20 +90,20 @@ export async function Update(id: number, newSalesInfo: Sale, next: NextFunction)
       }
     });
   } catch (error: any) {
-    return next(new InternalServerException(`Error UpdateSale service: ${error.message}`));
+    return next(new InternalServerException(`Error UpdateOrder service: ${error.message}`));
   }
 }
 
 export async function Delete(id: number, next: NextFunction) {
   try {
-    const saleExists = await prisma.sale.findUnique({ where: { id } });
+    const orderExists = await prisma.sale.findUnique({ where: { id } });
 
-    if (!saleExists) {
+    if (!orderExists) {
       return next(new BadRequestException('No se encontro la venta solicitada. Posiblemente ya ha sido eliminada'));
     }
 
     return await prisma.sale.delete({ where: { id } });
   } catch (error: any) {
-    return next(new InternalServerException(`Error DeleteSale service: ${error.message}`));
+    return next(new InternalServerException(`Error DeleteOrder service: ${error.message}`));
   }
 }

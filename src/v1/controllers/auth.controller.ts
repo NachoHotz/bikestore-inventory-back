@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { User } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerException } from '../exceptions';
 import {
@@ -9,10 +10,10 @@ import {
 } from '../../common/config';
 import { createToken } from '../../common/lib';
 import { RequestExtended } from '../../common/interfaces';
-import { LoginResponse, SignUpResponse } from '../types/responses/auth';
+import { BaseResponse } from '../types/responses/baseResponse';
 import * as authService from '../services/auth.service';
 
-export async function login(req: Request, res: Response<LoginResponse>, next: NextFunction) {
+export async function login(req: Request, res: Response<BaseResponse<User>>, next: NextFunction) {
   try {
     const userInfo = await authService.Login(req.body, next);
 
@@ -21,13 +22,13 @@ export async function login(req: Request, res: Response<LoginResponse>, next: Ne
     res.cookie(CookieType.session, userInfo.session_token, SessionCookieOpts);
     res.cookie(CookieType.refresh, userInfo.refresh_token, RefreshCookieOpts);
 
-    return res.status(200).send({ status: 200, user: userInfo.current_user });
+    return res.status(200).send({ status: 200, message: 'Inicio de sesión exitoso', data: userInfo.current_user });
   } catch (error: any) {
     return next(new InternalServerException(`Error login controller: ${error.message}`));
   }
 }
 
-export async function signUp(req: Request, res: Response<SignUpResponse>, next: NextFunction) {
+export async function signUp(req: Request, res: Response<BaseResponse<User>>, next: NextFunction) {
   try {
     const userInfo = await authService.SignUp(req.body, next);
 
@@ -38,7 +39,7 @@ export async function signUp(req: Request, res: Response<SignUpResponse>, next: 
     res.cookie(CookieType.session, userInfo.session_token, SessionCookieOpts);
     res.cookie(CookieType.refresh, userInfo.refresh_token, RefreshCookieOpts);
 
-    return res.status(200).send({ status: 200, user: userInfo.current_user });
+    return res.status(200).send({ status: 200, message: 'Registro exitoso',  data: userInfo.current_user });
   } catch (error: any) {
     return next(new InternalServerException(`Error signUp controller: ${error.message}`));
   }

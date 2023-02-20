@@ -26,18 +26,18 @@ model Provider {
 }
 
 model Product {
-  id          String           @id
-  name        String           @db.VarChar
-  description String?          @db.Text
-  stock       Int              @db.Integer
-  price       Float            @db.Real
-  category    Category         @relation(fields: [categoryId], references: [id])
+  id          String            @id
+  name        String            @db.VarChar
+  description String?           @db.Text
+  stock       Int               @db.Integer
+  price       Float             @db.Real
+  category    Category          @relation(fields: [categoryId], references: [id])
   categoryId  Int
-  provider    Provider         @relation(fields: [providerId], references: [id])
+  provider    Provider          @relation(fields: [providerId], references: [id])
   providerId  Int
-  sale        ProductsOnSale[]
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  order       ProductsOnOrder[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 }
 
 model Category {
@@ -48,30 +48,31 @@ model Category {
   updatedAt DateTime  @updatedAt
 }
 
-model Sale {
-  id              Int              @id() @default(autoincrement())
-  date            DateTime         @default(now())
-  products        ProductsOnSale[]
-  paymentMethod   PaymentMethod    @relation(fields: [paymentMethodId], references: [id])
+model Order {
+  id              Int               @id() @default(autoincrement())
+  date            DateTime          @default(now())
+  products        ProductsOnOrder[]
+  paymentMethod   PaymentMethod     @relation(fields: [paymentMethodId], references: [id])
   paymentMethodId Int
   amount          Float
 }
 
-model ProductsOnSale {
+model ProductsOnOrder {
   id         Int      @default(autoincrement())
   product    Product  @relation(fields: [productId], references: [id])
   productId  String
-  sale       Sale     @relation(fields: [saleId], references: [id])
-  saleId     Int
+  order      Order    @relation(fields: [orderId], references: [id])
+  orderId    Int      @map("orderId")
   assignedAt DateTime @default(now())
 
-  @@id([productId, saleId])
+  @@id([productId, orderId])
+  @@map("ProductsOnSale")
 }
 
 model PaymentMethod {
   id        Int      @id() @default(autoincrement())
   name      String   @db.VarChar
-  sales     Sale[]
+  orders    Order[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

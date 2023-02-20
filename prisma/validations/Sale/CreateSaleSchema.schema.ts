@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const CreateSaleSchema = z.object({
+export const CreateOrderSchema = z.object({
   body: z.object({
     amount: z
       .number({

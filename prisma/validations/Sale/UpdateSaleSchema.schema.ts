@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const UpdateSaleSchema = z.object({
+export const UpdateOrderSchema = z.object({
   body: z.object({
     amount: z
       .number({ invalid_type_error: 'El monto debe ser un número' })
