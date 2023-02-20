@@ -3,11 +3,11 @@ import { CreateOrderSchema, UpdateOrderSchema } from '../../../prisma/validation
 import { validateSchema } from '../middlewares/validateSchema.middleware';
 import * as controller from '../controllers/order.controller';
 
-const salesRouter = Router();
+const ordersRouter = Router();
 
-salesRouter.get('/', controller.getAll);
-salesRouter.post('/', validateSchema(CreateOrderSchema), controller.create);
-salesRouter.put('/:id', validateSchema(UpdateOrderSchema), controller.update);
-salesRouter.delete('/:id', controller.deleteOne);
+ordersRouter.get('/', controller.getAll);
+ordersRouter.post('/', validateSchema(CreateOrderSchema), controller.create);
+ordersRouter.put('/:id', validateSchema(UpdateOrderSchema), controller.update);
+ordersRouter.delete('/:id', controller.deleteOne);
 
-export default salesRouter;
+export default ordersRouter;
