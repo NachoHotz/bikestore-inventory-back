@@ -5,7 +5,7 @@ import { IQuery } from '../../common/interfaces';
 import { BadRequestException, InternalServerException, NotFoundException } from '../exceptions';
 
 export async function GetAll(next: NextFunction, filters?: Partial<IQuery>) {
-  logger.info({ filters })
+  logger.info({ filters });
 
   try {
     if (filters && Object.entries(filters).length !== 0) {
@@ -40,7 +40,7 @@ export async function GetAll(next: NextFunction, filters?: Partial<IQuery>) {
           category: true,
           provider: true
         }
-      })
+      });
     }
 
     return await prisma.product.findMany({

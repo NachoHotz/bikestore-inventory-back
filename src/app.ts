@@ -6,8 +6,9 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import errorMiddleware from './v1/middlewares/error.middleware';
 import v1MainRouter from './v1/routes/index.routes';
-import { corsOptions, envConfig, NodeEnvs } from './common/config/';
+import { corsOptions, envConfig } from './common/config/';
 import { NotFoundException } from './v1/exceptions';
+import { NodeEnvs } from './common/enums';
 
 const app: Application = express();
 

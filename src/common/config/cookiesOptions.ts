@@ -1,9 +1,5 @@
-import { CookieOptions } from 'express';
-import { CookieType } from './enums';
-
-export type CookieOptsType = {
-  [key in CookieType]: CookieOptions
-}
+import { CookieType } from '../enums';
+import { CookieOptsType } from '../types';
 
 export const CookieOpts: CookieOptsType = {
   [CookieType.session]: {

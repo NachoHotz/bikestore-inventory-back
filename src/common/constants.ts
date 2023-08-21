@@ -1,5 +1,6 @@
 import { TokenType } from './enums';
-import { envConfig } from './env';
+import { envConfig } from './config/env';
+import { IJwtTokenConfig } from './types';
 
 const {
   SERVER_DEV_URL,
@@ -14,13 +15,6 @@ export const SERVER_URLS = {
   development: SERVER_DEV_URL,
   production: SERVER_PROD_URL
 };
-
-type IJwtTokenConfig = {
-  [key in TokenType]: {
-    secret: string;
-    exp: string;
-  }
-}
 
 export const JwtTokenConfig: IJwtTokenConfig = {
   [TokenType.session]: {

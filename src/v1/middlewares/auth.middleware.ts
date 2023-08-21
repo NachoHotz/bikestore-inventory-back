@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { CookieType, prisma, TokenType } from '../../common/config';
+import { prisma } from '../../common/config';
+import { CookieType, TokenType } from '../../common/enums';
 import { RequestExtended } from '../../common/interfaces';
 import { decodeToken } from '../../common/lib/jwt';
 import { InvalidTokenException, MissingTokenException } from '../exceptions';

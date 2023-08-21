@@ -1,7 +1,8 @@
 import * as jwt from 'jsonwebtoken';
 import { DataStoredInToken } from '../interfaces';
 import { User } from '@prisma/client';
-import { JwtTokenConfig, TokenType } from '../config';
+import { TokenType } from '../enums';
+import { JwtTokenConfig } from '../constants';
 
 export function createToken(data: User, tokenType: TokenType): string {
   const dataStoredInToken: DataStoredInToken = {

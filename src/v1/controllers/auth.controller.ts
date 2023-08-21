@@ -2,15 +2,12 @@
 import { User } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerException } from '../exceptions';
-import {
-  CookieOpts,
-  CookieType,
-  TokenType,
-} from '../../common/config';
 import { createToken } from '../../common/lib';
 import { RequestExtended } from '../../common/interfaces';
 import { BaseResponse } from '../types/responses/baseResponse';
 import * as authService from '../services/auth.service';
+import { CookieType, TokenType } from '../../common/enums';
+import { CookieOpts } from '../../common/config';
 
 export async function login(req: Request, res: Response<BaseResponse<User>>, next: NextFunction) {
   try {

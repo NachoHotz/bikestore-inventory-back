@@ -1,5 +1,5 @@
+import { TokenType } from '../../common/enums';
 import HttpException from './HttpException';
-import { TokenType } from '../../common/config';
 
 export class InvalidTokenException extends HttpException {
   constructor(tokenType: TokenType, message = `Invalid ${tokenType} token`) {

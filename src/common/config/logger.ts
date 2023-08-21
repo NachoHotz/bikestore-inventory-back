@@ -1,5 +1,5 @@
 import winston from 'winston';
-import { NodeEnvs } from './enums';
+import { NodeEnvs } from '../enums';
 import { envConfig } from './env';
 
 const { NODE_ENV } = envConfig;

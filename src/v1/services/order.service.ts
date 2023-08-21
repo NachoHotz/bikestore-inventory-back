@@ -1,11 +1,11 @@
-import { Sale } from '@prisma/client';
+import { Order } from '@prisma/client';
 import { NextFunction } from 'express';
 import { prisma } from '../../common/config';
 import { BadRequestException, InternalServerException } from '../exceptions';
 
 export async function GetAll(next: NextFunction) {
   try {
-    const orders = await prisma.sale.findMany({
+    const orders = await prisma.order.findMany({
       include: {
         products: {
           include: {
@@ -27,9 +27,9 @@ export async function GetAll(next: NextFunction) {
   }
 }
 
-export async function Create(newSaleInfo: Sale, products: string[], next: NextFunction) {
+export async function Create(newSaleInfo: Order, products: string[], next: NextFunction) {
   try {
-    const createdOrder = await prisma.sale.create({
+    const createdOrder = await prisma.order.create({
       data: {
         amount: newSaleInfo.amount,
         paymentMethodId: newSaleInfo.paymentMethodId,
@@ -50,9 +50,9 @@ export async function Create(newSaleInfo: Sale, products: string[], next: NextFu
       return { orderId: createdOrder.id, productId: product };
     });
 
-    await prisma.productsOnSale.createMany({ data: ordersWithProducts });
+    await prisma.productsOnOrder.createMany({ data: ordersWithProducts });
 
-    return await prisma.sale.findUnique({
+    return await prisma.order.findUnique({
       where: {
         id: createdOrder.id
       },
@@ -70,15 +70,15 @@ export async function Create(newSaleInfo: Sale, products: string[], next: NextFu
   }
 }
 
-export async function Update(id: number, newOrderInfo: Sale, next: NextFunction) {
+export async function Update(id: number, newOrderInfo: Order, next: NextFunction) {
   try {
-    const orderExists = await prisma.sale.findUnique({ where: { id } });
+    const orderExists = await prisma.order.findUnique({ where: { id } });
 
     if (!orderExists) {
       return next(new BadRequestException('No no se encontro la venta solicitada'));
     }
 
-    return await prisma.sale.update({
+    return await prisma.order.update({
       where: { id },
       data: newOrderInfo,
       include: {
@@ -96,13 +96,13 @@ export async function Update(id: number, newOrderInfo: Sale, next: NextFunction)
 
 export async function Delete(id: number, next: NextFunction) {
   try {
-    const orderExists = await prisma.sale.findUnique({ where: { id } });
+    const orderExists = await prisma.order.findUnique({ where: { id } });
 
     if (!orderExists) {
       return next(new BadRequestException('No se encontro la venta solicitada. Posiblemente ya ha sido eliminada'));
     }
 
-    return await prisma.sale.delete({ where: { id } });
+    return await prisma.order.delete({ where: { id } });
   } catch (error: any) {
     return next(new InternalServerException(`Error DeleteOrder service: ${error.message}`));
   }

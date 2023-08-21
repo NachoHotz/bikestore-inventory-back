@@ -1,10 +1,10 @@
-import { Sale } from '@prisma/client';
+import { Order } from '@prisma/client';
 import { Request, Response, NextFunction } from 'express';
 import { InternalServerException, NotFoundException } from '../exceptions';
 import { BaseResponse } from '../types/responses/baseResponse';
 import * as saleService from '../services/order.service';
 
-export async function getAll(_req: Request, res: Response<BaseResponse<Sale[]>>, next: NextFunction) {
+export async function getAll(_req: Request, res: Response<BaseResponse<Order[]>>, next: NextFunction) {
   try {
     const allSales = await saleService.GetAll(next);
 
@@ -18,7 +18,7 @@ export async function getAll(_req: Request, res: Response<BaseResponse<Sale[]>>,
   }
 }
 
-export async function create(req: Request, res: Response<BaseResponse<Sale>>, next: NextFunction) {
+export async function create(req: Request, res: Response<BaseResponse<Order>>, next: NextFunction) {
   try {
     const createdOrder = await saleService.Create(req.body, req.body.products, next);
 
@@ -30,7 +30,7 @@ export async function create(req: Request, res: Response<BaseResponse<Sale>>, ne
   }
 }
 
-export async function update(req: Request, res: Response<BaseResponse<Sale>>, next: NextFunction) {
+export async function update(req: Request, res: Response<BaseResponse<Order>>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -45,7 +45,7 @@ export async function update(req: Request, res: Response<BaseResponse<Sale>>, ne
   }
 }
 
-export async function deleteOne(req: Request, res: Response<BaseResponse<Sale>>, next: NextFunction) {
+export async function deleteOne(req: Request, res: Response<BaseResponse<Order>>, next: NextFunction) {
   const id = parseInt(req.params.id, 10);
 
   try {

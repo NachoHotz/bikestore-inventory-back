@@ -1,5 +1,6 @@
 import app from './src/app';
-import { envConfig, logger, prisma, SERVER_URLS } from './src/common/config';
+import { envConfig, logger, prisma } from './src/common/config';
+import { SERVER_URLS } from './src/common/constants';
 
 const { API_PORT, NODE_ENV } = envConfig;
 const currentServerUrl = SERVER_URLS[NODE_ENV as keyof typeof SERVER_URLS];
