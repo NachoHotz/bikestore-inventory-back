@@ -2,7 +2,7 @@ import app from './src/app';
 import { envConfig, logger, prisma, SERVER_URLS } from './src/common/config';
 
 const { API_PORT, NODE_ENV } = envConfig;
-const currentServerUrl = SERVER_URLS[NODE_ENV as keyof typeof SERVER_URLS]
+const currentServerUrl = SERVER_URLS[NODE_ENV as keyof typeof SERVER_URLS];
 
 app.listen(API_PORT || 3001, () => {
   prisma.$connect().then(() => {
