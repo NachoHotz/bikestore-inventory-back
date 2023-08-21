@@ -3,10 +3,9 @@ import { User } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerException } from '../exceptions';
 import {
+  CookieOpts,
   CookieType,
   TokenType,
-  RefreshCookieOpts,
-  SessionCookieOpts
 } from '../../common/config';
 import { createToken } from '../../common/lib';
 import { RequestExtended } from '../../common/interfaces';
@@ -19,8 +18,8 @@ export async function login(req: Request, res: Response<BaseResponse<User>>, nex
 
     if (!userInfo) return;
 
-    res.cookie(CookieType.session, userInfo.session_token, SessionCookieOpts);
-    res.cookie(CookieType.refresh, userInfo.refresh_token, RefreshCookieOpts);
+    res.cookie(CookieType.session, userInfo.session_token, CookieOpts.session_token);
+    res.cookie(CookieType.refresh, userInfo.refresh_token, CookieOpts.refresh_token);
 
     return res.status(200).send({ status: 200, message: 'Inicio de sesión exitoso', data: userInfo.current_user });
   } catch (error: any) {
@@ -36,8 +35,8 @@ export async function signUp(req: Request, res: Response<BaseResponse<User>>, ne
       return next(new InternalServerException('Hubo un error en el registro. Por favor intenta nuevamente'));
     }
 
-    res.cookie(CookieType.session, userInfo.session_token, SessionCookieOpts);
-    res.cookie(CookieType.refresh, userInfo.refresh_token, RefreshCookieOpts);
+    res.cookie(CookieType.session, userInfo.session_token, CookieOpts.session_token);
+    res.cookie(CookieType.refresh, userInfo.refresh_token, CookieOpts.refresh_token);
 
     return res.status(200).send({ status: 200, message: 'Registro exitoso',  data: userInfo.current_user });
   } catch (error: any) {
@@ -62,7 +61,7 @@ export function refreshSessionToken(req: RequestExtended, res: Response, next: N
   try {
     const session_token = createToken(user, TokenType.session);
 
-    res.cookie(CookieType.session, session_token, SessionCookieOpts);
+    res.cookie(CookieType.session, session_token, CookieOpts.session_token);
 
     return res.sendStatus(204);
   } catch (error: any) {

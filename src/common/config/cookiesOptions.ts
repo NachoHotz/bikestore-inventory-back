@@ -1,13 +1,19 @@
 import { CookieOptions } from 'express';
+import { CookieType } from './enums';
 
-export const SessionCookieOpts: CookieOptions = {
-  httpOnly: true,
-  sameSite: 'lax',
-  secure: true
-};
+export type CookieOptsType = {
+  [key in CookieType]: CookieOptions
+}
 
-export const RefreshCookieOpts: CookieOptions = {
-  httpOnly: true,
-  sameSite: 'lax',
-  secure: true
+export const CookieOpts: CookieOptsType = {
+  [CookieType.session]: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: true
+  },
+  [CookieType.refresh]: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: true
+  }
 };
