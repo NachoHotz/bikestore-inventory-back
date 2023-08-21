@@ -1,16 +1,18 @@
+import * as jwt from 'jsonwebtoken';
 import { DataStoredInToken } from '../interfaces';
 import { User } from '@prisma/client';
-import { jwtDecodeOpts, jwtSignOpts } from '../utils/jwtOpts';
-import { TokenType } from '../config';
+import { JwtTokenConfig, TokenType } from '../config';
 
-export function createToken(data: User, tokenType: TokenType) {
+export function createToken(data: User, tokenType: TokenType): string {
   const dataStoredInToken: DataStoredInToken = {
     email: data.email
   };
 
-  return jwtSignOpts[tokenType as keyof typeof jwtSignOpts](dataStoredInToken);
+  const jwtConf = JwtTokenConfig[tokenType];
+
+  return jwt.sign(dataStoredInToken, jwtConf.secret, { expiresIn: jwtConf.exp });
 }
 
-export function decodeToken(token: string, tokenType: TokenType) {
-  return jwtDecodeOpts[tokenType as keyof typeof jwtDecodeOpts](token);
+export function decodeToken(token: string, tokenType: TokenType): DataStoredInToken {
+  return jwt.verify(token, JwtTokenConfig[tokenType].secret) as DataStoredInToken;
 }
